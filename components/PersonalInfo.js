@@ -21,43 +21,65 @@ const PersonalInfo = ({ navigation, route }) => {
     selectedGender: selectedGender,
   };
   const onNext = () => {
-    if (!fullname || fullname === "") {
-      if (!address || address === "") {
-        if (!phoneNo || phoneNo === "") {
-          if (!selectedGender || selectedGender === "") {
-            alert("Please enter all required filed");
-          } else {
-            alert("Please enter your fullname");
-          }
-          return;
-        }
-      }
-    } else if (!address || address === "") {
-      if (!phoneNo || phoneNo === "") {
-        if (!selectedGender || selectedGender === "") {
-          alert("Please enter all required filed");
-        } else {
-          alert("please enter your address");
-        }
-        return;
-      }
-    } else if (!phoneNo || phoneNo === "") {
-      if (!selectedGender || selectedGender === "") {
-        alert("Please enter all required filed");
-      } else {
-        alert("please enter your phoneNo");
-      }
+    if (!fullname || fullname.trim().length === 0) {
+      alert("Please enter your full name");
       return;
-    } else if (!selectedGender || selectedGender === "") {
-      alert("please select your gender");
-      return;
-    } else {
-      navigation.navigate("AccountInfo", { PersonalData });
-      setFullName("");
-      setAddress("");
-      setPhoneNo("");
-      setSelectedGender("");
     }
+    if (!/^[a-zA-Z ]+$/.test(fullname)) {
+      alert("Please enter only letters for your full name");
+      return;
+    }
+    if (!address || address.trim().length === 0) {
+      alert("Please enter your address");
+      return;
+    }
+    if (!phoneNo || phoneNo.trim().length === 0) {
+      alert("Please enter your phone number");
+      return;
+    }
+    if (!/^\d+$/.test(phoneNo)) {
+      alert("Please enter a valid phone number");
+      return;
+    }
+    if (!/^\d{11}$/.test(phoneNo)) {
+      alert("phone number length should be 11-digits");
+      return;
+    }
+    if (!selectedGender) {
+      alert("Please select your gender");
+      return;
+    }
+
+    // if (!fullname || fullname === "") {
+    //   alert("Please enter your full name");
+    //   return;
+    // }
+    // if (!/^[a-zA-Z ]+$/.test(fullname)) {
+    //   alert("Please enter a valid full name");
+    //   return;
+    // }
+    // if (!address || address === "") {
+    //   alert("Please enter your address");
+    //   return;
+    // }
+    // if (!phoneNo || phoneNo === "") {
+    //   alert("Please enter your phone number");
+    //   return;
+    // }
+    // if (!/^\d+$/.test(phoneNo)) {
+    //   alert("Please enter a valid phone number");
+    //   return;
+    // }
+    // if (!selectedGender || selectedGender === "") {
+    //   alert("Please select your gender");
+    //   return;
+    // }
+    // All fields are filled, navigate to AccountInfo screen
+    navigation.navigate("AccountInfo", { PersonalData });
+    setFullName("");
+    setAddress("");
+    setPhoneNo("");
+    setSelectedGender("");
   };
 
   const genderOptions = [
@@ -188,7 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#16a085",
     height: "6%",
     width: "35%",
-    borderRadius: "18%",
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",

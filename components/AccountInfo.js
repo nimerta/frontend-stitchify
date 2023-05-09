@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import {
   Text,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   Modal,
 } from "react-native";
+import { mainIp } from "../IPConfigration";
 
 const AccountInfo = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
@@ -27,39 +29,103 @@ const AccountInfo = ({ navigation, route }) => {
   };
   const handleSubmit = () => {
     if (!email || email === "") {
-      if (!password || password === "") {
-        if (!confirmPassword || confirmPassword === "") {
-          setShowModal(false);
-          alert("Please enter all required filed");
-        } else {
-          alert("please enter your email");
-        }
-        return;
-      }
-    } else if (!password || password === "") {
-      if (!confirmPassword || confirmPassword === "") {
-        alert("Please enter all required filed");
-      } else {
-        alert("please enter your password");
-      }
+      alert("Please enter your email");
       return;
-    } else if (!confirmPassword || confirmPassword === "") {
-      alert("please enter your confirm password");
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("Please enter a valid email address");
+      return;
+    } else if (
+      !password ||
+      password === "" ||
+      !confirmPassword ||
+      confirmPassword === ""
+    ) {
+      alert("Please enter all required fields");
+      return;
+    } else if (password.length < 8) {
+      alert("Password should be at least 8 characters long");
+      return;
+    } else if (!/[A-Z]/.test(password)) {
+      alert("Password should contain at least one uppercase letter");
+      return;
+    } else if (!/[a-z]/.test(password)) {
+      alert("Password should contain at least one lowercase letter");
+      return;
+    } else if (!/\d/.test(password)) {
+      alert("Password should contain at least one number");
+      return;
+    } else if (!/[!@#$%^&*(),.?:{}|<>]/.test(password)) {
+      alert("Password should contain at least one special character");
+      return;
+    } else if (password !== confirmPassword) {
+      alert("Passwords do not match");
       return;
     } else {
       setShowModal(true);
       console.log("in else condition");
-      // navigation.navigate("Measurement", { AccountData });
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
     }
   };
 
-  const registerUser = () => {
+  const registerUser = async () => {
     setShowModal(false);
-    alert("Account created successfully");
-    navigation.navigate("Login");
+    console.log(" personla data with account: ", AccountData);
+    var bodyData = {
+      email: email,
+      full_name: PersonalData.fullname,
+      password: password,
+      phone_no: PersonalData.phoneNo,
+      gender: PersonalData.selectedGender,
+      address: PersonalData.address,
+    };
+
+    console.log("body data: ", bodyData);
+
+    console.log("main ip :", mainIp);
+    console.log(`${mainIp}/api/user/sign-up`);
+    var apiResponse = await axios
+      .post(`http://${mainIp}/api/user/sign-up`, bodyData)
+      .then(async (onSubmit) => {
+        console.log("on submit ", onSubmit.data);
+        alert("Account created successfully");
+        navigation.navigate("Login");
+      })
+      .catch(async (onSubmitError) => {
+        alert("Something went wrong!");
+
+        console.log("on submit error: ", onSubmitError.response);
+      });
+  };
+
+  const registerUserAndNavigate = async () => {
+    console.log("personla data with account: ", AccountData);
+    var bodyData = {
+      email: email,
+      full_name: PersonalData.fullname,
+      password: password,
+      phone_no: PersonalData.phoneNo,
+      gender: PersonalData.selectedGender,
+      address: PersonalData.address,
+    };
+
+    console.log("body data: ", bodyData);
+
+    console.log("main ip :", mainIp);
+    console.log(`${mainIp}/api/user/sign-up`);
+    var apiResponse = await axios
+      .post(`http://${mainIp}/api/user/sign-up`, bodyData)
+      .then(async (onSubmit) => {
+        console.log("on submit ", onSubmit.data);
+        var user_id = onSubmit.data.savedUser._id;
+        console.log("user id:", user_id);
+
+        alert("Account created successfully");
+        navigation.navigate("Measurement", user_id);
+      })
+      .catch(async (onSubmitError) => {
+        alert("Something went wrong!");
+
+        console.log("on submit error: ", onSubmitError.response);
+      });
   };
   //
   // };
@@ -80,8 +146,8 @@ const AccountInfo = ({ navigation, route }) => {
               <TouchableOpacity
                 onPress={() => {
                   console.log("1");
+                  registerUserAndNavigate();
                   setShowModal(false);
-                  navigation.navigate("Measurement", { AccountData });
                 }}
               >
                 <Text>Yes</Text>
@@ -101,9 +167,9 @@ const AccountInfo = ({ navigation, route }) => {
           style={styles.inputfield}
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={setEmail}
           keyboardType="email-address"
           value={email}
+          onChangeText={setEmail}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -113,9 +179,9 @@ const AccountInfo = ({ navigation, route }) => {
           style={styles.inputfield}
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={setPassword}
           secureTextEntry={true}
           value={password}
+          onChangeText={setPassword}
         />
       </View>
       <View style={styles.inputContainer}>
@@ -125,9 +191,10 @@ const AccountInfo = ({ navigation, route }) => {
           style={styles.inputfield}
           autoCapitalize="none"
           autoCorrect={false}
-          onChangeText={setConfirmPassword}
+          //onChangeText={setConfirmPassword}
           secureTextEntry={true}
           value={confirmPassword}
+          onChangeText={setConfirmPassword}
         />
       </View>
       <TouchableOpacity onPress={signUpNavigation} style={styles.btn1}>
@@ -213,7 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#95a5a6",
     height: "6%",
     width: "35%",
-    borderRadius: "18%",
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",
@@ -226,7 +293,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#16a085",
     height: "6%",
     width: "35%",
-    borderRadius: "18%",
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",

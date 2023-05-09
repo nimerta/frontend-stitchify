@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import axios from "axios";
+import { mainIp } from "../IPConfigration";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ const Login = ({ navigation }) => {
     navigation.navigate("PersonalInfo");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!email || email === "") {
       if (!password || password === "") {
         alert("Please enter your email and password");
@@ -29,12 +31,36 @@ const Login = ({ navigation }) => {
         alert("Please enter your email");
       }
       return;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      alert("Please enter a valid email address");
+      return;
     } else if (!password || password === "") {
       alert("Please enter your password");
       return;
     } else {
-      alert("Login successful!");
-      navigation.navigate("HomeScreen", { data });
+      //alert("Login successful!");
+      //navigation.navigate("HomeScreen");
+      var bodyData = {
+        email: email,
+        password: password,
+      };
+
+      var apiResponse = await axios
+        .post(`http://${mainIp}/api/user/sign-in`, bodyData)
+        .then(async (onSuccess) => {
+          console.log("on success:", onSuccess.data);
+          if (onSuccess.data.status === "200") {
+            console.log("Login successfully: ");
+            alert("Login succesfully");
+            navigation.navigate("Main", { data: onSuccess.data });
+          } else {
+            alert("Invalid email or password");
+            console.log("error: ", onSuccess.data);
+          }
+        })
+        .catch(async (onSuccessError) => {
+          console.log("ion usccess error: ", onSuccessError);
+        });
       setEmail("");
       setPassword("");
     }
@@ -143,7 +169,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#16a085",
     height: "6%",
     width: "95%",
-    borderRadius: "18%",
+    borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",

@@ -10,6 +10,7 @@ import PersonalInfo from "./components/PersonalInfo";
 import AccountInfo from "./components/AccountInfo";
 import Measurement from "./components/Measurement";
 import Loading from "./components/Loaders/Loading";
+import BottomNavigator from "./components/BottomNavigator";
 const Stack = createNativeStackNavigator();
 
 function SplashScreen({ navigation }) {
@@ -42,11 +43,11 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="HomeScreen"
           component={HomeScreen}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Stack.Screen name="AccountInfo" component={AccountInfo} />
         <Stack.Screen name="PersonalInfo" component={PersonalInfo} />
         <Stack.Screen
@@ -58,6 +59,11 @@ export default function App() {
           name="Measurement"
           component={Measurement}
           // options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Main"
+          component={BottomNavigator}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
