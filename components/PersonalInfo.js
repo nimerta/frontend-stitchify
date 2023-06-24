@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   Text,
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  KeyboardAvoidingView,
 } from "react-native";
 
 const PersonalInfo = ({ navigation, route }) => {
@@ -29,10 +30,10 @@ const PersonalInfo = ({ navigation, route }) => {
       alert("Please enter only letters for your full name");
       return;
     }
-    if (!address || address.trim().length === 0) {
-      alert("Please enter your address");
-      return;
-    }
+    // if (!address || address.trim().length === 0) {
+    //   alert("Please enter your address");
+    //   return;
+    // }
     if (!phoneNo || phoneNo.trim().length === 0) {
       alert("Please enter your phone number");
       return;
@@ -50,30 +51,6 @@ const PersonalInfo = ({ navigation, route }) => {
       return;
     }
 
-    // if (!fullname || fullname === "") {
-    //   alert("Please enter your full name");
-    //   return;
-    // }
-    // if (!/^[a-zA-Z ]+$/.test(fullname)) {
-    //   alert("Please enter a valid full name");
-    //   return;
-    // }
-    // if (!address || address === "") {
-    //   alert("Please enter your address");
-    //   return;
-    // }
-    // if (!phoneNo || phoneNo === "") {
-    //   alert("Please enter your phone number");
-    //   return;
-    // }
-    // if (!/^\d+$/.test(phoneNo)) {
-    //   alert("Please enter a valid phone number");
-    //   return;
-    // }
-    // if (!selectedGender || selectedGender === "") {
-    //   alert("Please select your gender");
-    //   return;
-    // }
     // All fields are filled, navigate to AccountInfo screen
     navigation.navigate("AccountInfo", { PersonalData });
     setFullName("");
@@ -89,7 +66,7 @@ const PersonalInfo = ({ navigation, route }) => {
   ];
 
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAwareScrollView style={styles.mainContainer}>
       <View style={styles.container}>
         <Text style={styles.mainHeader}>Personal Information</Text>
       </View>
@@ -104,7 +81,7 @@ const PersonalInfo = ({ navigation, route }) => {
           value={fullname}
         />
       </View>
-      <View style={styles.inputContainer}>
+      {/* <View style={styles.inputContainer}>
         <Text style={styles.labels}>Address</Text>
         <TextInput
           placeholder="Enter your Address"
@@ -114,7 +91,7 @@ const PersonalInfo = ({ navigation, route }) => {
           onChangeText={setAddress}
           value={address}
         />
-      </View>
+      </View> */}
       <View style={styles.inputContainer}>
         <Text style={styles.labels}>Phone Number</Text>
         <TextInput
@@ -150,7 +127,7 @@ const PersonalInfo = ({ navigation, route }) => {
       <TouchableOpacity onPress={onNext} style={styles.btn1}>
         <Text style={styles.btnText}>Next </Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -161,7 +138,6 @@ const styles = StyleSheet.create({
   },
   container: {
     alignItems: "center",
-
     justifyContent: "center",
   },
   bgimg: {
@@ -188,7 +164,7 @@ const styles = StyleSheet.create({
     color: "black",
     marginLeft: "4%",
     marginBottom: "2%",
-    // marginTop: "2%",
+    marginTop: "13%",
   },
   inputfield: {
     backgroundColor: "#EEF1F6",
@@ -197,15 +173,7 @@ const styles = StyleSheet.create({
     width: "95%",
     marginLeft: "2%",
   },
-  fp: {
-    alignItems: "flex-end",
-    width: "94%",
-  },
-  link: {
-    color: "black",
-    fontSize: 18,
-    marginBottom: "5%",
-  },
+
   btn1: {
     backgroundColor: "#16a085",
     height: "6%",
@@ -214,28 +182,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",
-    // marginLeft: "2%",
-    position: "relative",
-    top: 50,
-    left: 250,
+    marginLeft: 250,
+    // position: "relative",
+    top: -80,
+    // left: 250,
   },
   btnText: {
     fontSize: 25,
     fontWeight: "bold",
     color: "white",
   },
-  accText: {
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
-    flexDirection: "row",
-  },
-  pickStyle: {
-    // width: 300,
-  },
+
   genderPicker: {
     width: "100%",
-    top: -85,
+    top: -75,
+    //backgroundColor: "yellow",
   },
 });
 export default PersonalInfo;

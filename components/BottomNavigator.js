@@ -3,11 +3,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
 import SearchScreen from "./SearchScreen";
 import SettingScreen from "./SettingScreen";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FeatherIcon from "react-native-vector-icons/Feather";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { View } from "react-native";
+import { Feather } from "react-native-feather";
+import AddToCartScreen from "./AddToCartScreen";
+import MyCartScreen from "./MyCartScreen";
 const Tab = createBottomTabNavigator();
 
 const BottomNavigator = () => {
@@ -44,6 +48,9 @@ const BottomNavigator = () => {
             iconComponent = (
               <Ionicons name={iconName} size={size} color={color} />
             );
+          } else if (route.name === "Cart") {
+            iconName = "shopping-cart";
+            iconComponent = <Icon name={iconName} size={size} color={color} />;
           }
 
           if (focused) {
@@ -74,8 +81,16 @@ const BottomNavigator = () => {
         options={{ headerShown: false }}
       />
       <Tab.Screen name="Search" component={SearchScreen} />
-
-      <Tab.Screen name="Settings" component={SettingScreen} />
+      <Tab.Screen
+        name="Cart"
+        component={MyCartScreen}
+        //options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingScreen}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 };

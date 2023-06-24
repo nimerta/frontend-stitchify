@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ShirtSize from "../Images/kurta1.jpg";
 import TrouserSize from "../Images/trouser.png";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { mainIp } from "../IPConfigration";
 
 import {
@@ -206,7 +206,7 @@ const Measurement = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <ScrollView>
         <Text style={styles.TxtStyle}>Measurement Form</Text>
         <Image style={styles.ShirtChart} source={ShirtSize} />
@@ -386,7 +386,7 @@ const Measurement = ({ navigation, route }) => {
           <Text style={styles.btnText}>Save</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

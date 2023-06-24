@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   Text,
   View,
@@ -7,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
+  KeyboardAvoidingView,
 } from "react-native";
 import { mainIp } from "../IPConfigration";
 
@@ -134,7 +136,7 @@ const AccountInfo = ({ navigation, route }) => {
   // };
 
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAvoidingView behavior="padding" style={styles.mainContainer}>
       <Modal visible={showModal} transparent={true} animationType="fade">
         <View style={styles.modalView1}>
           <View style={styles.modalView2}>
@@ -197,18 +199,20 @@ const AccountInfo = ({ navigation, route }) => {
           onChangeText={setConfirmPassword}
         />
       </View>
-      <TouchableOpacity onPress={signUpNavigation} style={styles.btn1}>
-        <Text style={styles.btnText}>Back </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          handleSubmit();
-        }}
-        style={styles.btn2}
-      >
-        <Text style={styles.btnText}>Submit </Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.btnsContainer}>
+        <TouchableOpacity onPress={signUpNavigation} style={styles.btn1}>
+          <Text style={styles.btnText}>Back </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleSubmit();
+          }}
+          style={styles.btn2}
+        >
+          <Text style={styles.btnText}>Submit </Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -267,61 +271,35 @@ const styles = StyleSheet.create({
     width: "95%",
     marginLeft: "2%",
   },
-  fp: {
-    alignItems: "flex-end",
-    width: "94%",
-  },
-  link: {
-    color: "black",
-    fontSize: 18,
-    marginBottom: "5%",
+  btnsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingTop: 80,
   },
   btn1: {
     backgroundColor: "#95a5a6",
-    height: "6%",
+    height: 50,
     width: "35%",
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",
     // marginLeft: "2%",
-    position: "relative",
-    top: 100,
-    left: 30,
   },
   btn2: {
     backgroundColor: "#16a085",
-    height: "6%",
+    height: 50,
     width: "35%",
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",
     // marginLeft: "2%",
-    position: "relative",
-    top: 50,
-    left: 250,
   },
   btnText: {
     fontSize: 25,
     fontWeight: "bold",
     color: "white",
-  },
-  accText: {
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
-    flexDirection: "row",
-  },
-  signText: {
-    color: "black",
-    fontSize: 18,
-    marginVertical: "2%",
-  },
-
-  spText: {
-    fontSize: 18,
-    fontWeight: "bold",
   },
 });
 

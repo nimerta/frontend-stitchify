@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import loginImg from "../Images/mobile.jpg";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   View,
   Text,
@@ -7,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
 } from "react-native";
 import axios from "axios";
 import { mainIp } from "../IPConfigration";
@@ -21,6 +23,9 @@ const Login = ({ navigation }) => {
 
   const signUpNavigation = () => {
     navigation.navigate("PersonalInfo");
+  };
+  const ForgetPasswordNavigation = () => {
+    navigation.navigate("ForgetPassword");
   };
 
   const handleSubmit = async () => {
@@ -67,7 +72,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAwareScrollView style={styles.mainContainer}>
       <View style={styles.container}>
         {/* <Text style={styles.mainHeader}>Login</Text> */}
         <Image style={styles.bgimg} source={loginImg} />
@@ -98,9 +103,9 @@ const Login = ({ navigation }) => {
         />
       </View>
 
-      <View style={styles.fp}>
+      <TouchableOpacity style={styles.fp} onPress={ForgetPasswordNavigation}>
         <Text style={styles.link}>Forgot password?</Text>
-      </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleSubmit} style={styles.btn1}>
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
@@ -110,7 +115,7 @@ const Login = ({ navigation }) => {
           <Text style={styles.spText}>signup</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   bgimg: {
-    height: 400,
+    height: 380,
     width: "100%",
   },
   mainHeader: {
@@ -167,13 +172,14 @@ const styles = StyleSheet.create({
   },
   btn1: {
     backgroundColor: "#16a085",
-    height: "6%",
+    height: "7%",
     width: "95%",
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
     // marginVertical: "10%",
-    marginLeft: "2%",
+    //marginLeft: "2%",
+    alignSelf: "center",
   },
   btnText: {
     fontSize: 25,
@@ -195,10 +201,6 @@ const styles = StyleSheet.create({
   spText: {
     fontSize: 18,
     fontWeight: "bold",
-  },
-  error: {
-    color: "red",
-    marginTop: 10,
   },
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -6,36 +6,30 @@ import {
   Image,
   ScrollView,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
-import Swiper from "react-native-swiper";
-import Lottie from "lottie-react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useState, useEffect } from "react";
-import Loading from "./Loaders/Loading";
-import Feather from "react-native-feather";
-import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { mainIp } from "../IPConfigration";
+import Loading from "./Loaders/Loading";
+import { MaterialIcons } from "@expo/vector-icons";
+import Swiper from "react-native-swiper";
 
-//import BottomNavigator from "./BottomNavigator";
-const HomeScreen = ({ route }) => {
-  // const { data } = route.params;
+const HomeScreen = () => {
+  const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(true);
   const [allDesigns, setAllDesigns] = useState([]);
 
   const getAllDesigns = async () => {
-    console.log("designs found");
-
-    var api = await axios
-      .get(`http://${mainIp}/api/home/get-designs-for-you`)
-      .then(async (onDesignsFound) => {
-        console.log("on designs found: ", onDesignsFound.data.designForYou);
-        setAllDesigns(onDesignsFound.data.designForYou);
-      })
-      .catch(async (onDesignsFoundError) => {
-        console.log("on design found error: ", onDesignsFoundError);
-      });
+    try {
+      const response = await axios.get(
+        `http://${mainIp}/api/home/get-designs-for-you`
+      );
+      setAllDesigns(response.data.designForYou);
+    } catch (error) {
+      console.log("Error retrieving designs:", error);
+    }
   };
 
   useEffect(() => {
@@ -44,7 +38,7 @@ const HomeScreen = ({ route }) => {
     }, 3000);
 
     getAllDesigns();
-    console.log("designs are visible in homescreen");
+    console.log("Designs are visible in HomeScreen");
   }, []);
 
   const services = [
@@ -66,14 +60,14 @@ const HomeScreen = ({ route }) => {
     },
   ];
 
-  const renderService = ({ item }) => (
-    <TouchableOpacity style={styles.ServicesBox}>
-      <View style={styles.IconContainer}>
-        <Image style={styles.IconStyle} source={item.image}></Image>
-      </View>
-      <Text style={styles.ServicesTxt}>{item.title}</Text>
-    </TouchableOpacity>
-  );
+  // const renderService = ({ item }) => (
+  //   <TouchableOpacity style={styles.ServicesBox}>
+  //     <View style={styles.IconContainer}>
+  //       <Image style={styles.IconStyle} source={item.image}></Image>
+  //     </View>
+  //     <Text style={styles.ServicesTxt}>{item.title}</Text>
+  //   </TouchableOpacity>
+  // );
 
   const categories = [
     {
@@ -117,53 +111,18 @@ const HomeScreen = ({ route }) => {
       <Text style={styles.ServicesTxt}>{item.title}</Text>
     </TouchableOpacity>
   );
-  const Designs = [
-    {
-      key: "1",
-      title: "Lehnga set",
-      image: require("../Images/lehnga.jpg"),
-      price: "RS 20K",
-    },
-    {
-      key: "2",
-      title: "Blouse",
-      image: require("../Images/2piece.jpg"),
-      price: "RS 2K",
-    },
-    {
-      key: "3",
-      title: "2 piece",
-      image: require("../Images/2piece.jpg"),
-      price: "RS 2K",
-    },
 
-    {
-      key: "4",
-      title: "Trouser",
-      image: require("../Images/pant.jpg"),
-      price: "RS 700",
-    },
-    {
-      key: "5",
-      title: "Kurta",
-      image: require("../Images/shirt.jpg"),
-      price: "RS 1K",
-    },
-    {
-      key: "6",
-      title: "Maxi Dress",
-      image: require("../Images/maxi.jpg"),
-      price: "RS 5K",
-    },
-  ];
   const renderDesigns = ({ item }) => (
-    <TouchableOpacity style={styles.DesignBox}>
+    <TouchableOpacity
+      style={styles.DesignBox}
+      onPress={() => navigation.navigate("AddToCartScreen", { design: item })}
+    >
       <View style={styles.DesignView}>
         <Image style={styles.DesignImage} source={item.image}></Image>
       </View>
       <View style={styles.descriptionBox}>
         <Text style={styles.DesignTxt}>{item.title}</Text>
-        <Text style={styles.DesignTxt}>RS {item.price}</Text>
+        <Text style={styles.DesignTxt}>Rs {item.price}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -264,9 +223,6 @@ const HomeScreen = ({ route }) => {
               />
             </View>
           </ScrollView>
-          {/* <View>
-            <BottomNavigator />
-          </View>  */}
         </View>
       )}
     </View>

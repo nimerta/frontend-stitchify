@@ -11,6 +11,21 @@ import AccountInfo from "./components/AccountInfo";
 import Measurement from "./components/Measurement";
 import Loading from "./components/Loaders/Loading";
 import BottomNavigator from "./components/BottomNavigator";
+import ForgetPassword from "./components/ForgetPassword";
+import Verification from "./components/Verification";
+import UpdatePassword from "./components/UpdatePassword";
+
+import EditProfile from "./components/EditProfile";
+import DetailsScreen from "./components/DetailsScreen";
+import EditAddressScreen from "./components/EditAddressScreen";
+import ChangeProfileImageScreen from "./components/ChangeProfileImageScreen";
+import AddToCartScreen from "./components/AddToCartScreen";
+import AddressListScreen from "./components/AddressListScreen";
+import MyCartScreen from "./components/MyCartScreen";
+import PaymentScreen from "./components/PaymentScreen";
+import ShippingAddressScreen from "./components/ShippingAddressScreen";
+import CheckoutScreen from "./components/CheckoutScreen";
+import UpdatedMsgScreen from "./components/UpdatedMsgScreen";
 const Stack = createNativeStackNavigator();
 
 function SplashScreen({ navigation }) {
@@ -64,6 +79,61 @@ export default function App() {
           name="Main"
           component={BottomNavigator}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen name="ForgetPassword" component={ForgetPassword} />
+        <Stack.Screen name="Verification" component={Verification} />
+        <Stack.Screen name="UpdatePassword" component={UpdatePassword} />
+        <Stack.Screen name="UpdatedMsgScreen" component={UpdatedMsgScreen} />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DetailsScreen"
+          component={DetailsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="EditAddressScreen"
+          component={EditAddressScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChangeProfileImageScreen"
+          component={ChangeProfileImageScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddToCartScreen"
+          component={AddToCartScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="AddressListScreen" component={AddressListScreen} />
+        <Stack.Screen
+          name="MyCartScreen"
+          component={MyCartScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PaymentScreen"
+          component={PaymentScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ShippingAddressScreen"
+          component={ShippingAddressScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CheckoutScreen"
+          component={CheckoutScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="OrderPlacedScreen"
+          component={CheckoutScreen}
+          //options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
