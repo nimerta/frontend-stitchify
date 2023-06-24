@@ -12,10 +12,38 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Lottie from "lottie-react-native";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { Bold } from "react-native-feather";
+import axios from "axios";
+import Ip from "../IPConfigration";
+import { enableScreens } from "react-native-screens";
 const ForgetPassword = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [userImage, setUserImage] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const [showModal, setShowModal] = useState(false);
+
+  const checkUser = async () => {
+    var bodyData = {
+      email: email,
+    };
+    var apiResponse = await axios
+      .post(`http://${Ip.mainIp}/api/user/check-user`, bodyData)
+      .then((onSubmit) => {
+        console.log("on submit: ", onSubmit.data);
+        if (onSubmit.data.status === "404") {
+          console.log("on submit but not found: ", onSubmit.data);
+        } else {
+          console.log("on success all ok:  ", onSubmit.data);
+          setUsername(onSubmit.data.user.full_name);
+          setUserImage(onSubmit.data.user.image.url);
+          setUserEmail(onSubmit.data.email);
+        }
+      })
+      .catch((onError) => {
+        console.log("on error: ", onError);
+      });
+  };
 
   const handleNext = () => {
     if (!email || email === "") {
@@ -24,13 +52,15 @@ const ForgetPassword = ({ navigation }) => {
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       alert("Please enter a valid email address");
       return;
+    } else {
+      checkUser();
+      setShowModal(true);
     }
-    setShowModal(true);
   };
 
   const handleModalYes = () => {
     setShowModal(false);
-    navigation.navigate("Verification");
+    navigation.navigate("Verification", userEmail);
   };
 
   const handleModalNo = () => {
@@ -74,10 +104,16 @@ const ForgetPassword = ({ navigation }) => {
               <View style={styles.modalContainerIcon}>
                 <Image
                   style={styles.imgBox}
-                  source={require("../../Stitchify/Images/mobile.jpg")}
+                  // source={require("../../Stitchify/Images/mobile.jpg")}
+                  source={{
+                    uri:
+                      userImage !== ""
+                        ? userImage
+                        : "https://img1.pnghut.com/1/22/9/PkvvVZiFEc/avatar-brand-youtube-ico-user-profile.jpg",
+                  }}
                 />
               </View>
-              <Text style={styles.UserNameTxt}>Nimerta bai</Text>
+              <Text style={styles.UserNameTxt}>{username}</Text>
             </View>
             <Text style={styles.modalText}>
               Is this your account? Are you sure you want to proceed?

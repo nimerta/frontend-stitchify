@@ -11,6 +11,7 @@ import OTPTextView from "react-native-otp-textinput";
 import axios from "axios";
 import verifiedApiIps from "../IPConfigration";
 import { StackActions } from "@react-navigation/native";
+import Ip from "../IPConfigration";
 const Verification = ({ navigation, route }) => {
   var [otpCode, setOtpCode] = useState("");
   console.log(" kdjsdh00", route.params);
@@ -18,7 +19,7 @@ const Verification = ({ navigation, route }) => {
   const sendOtpEmail = async () => {
     let apiResponse = await axios
       .get(
-        `http://${verifiedApiIps.homeIP}:4000/api/email/send-otp-email/${route.params}`
+        `http://${Ip.mainIp}:/api/forgot-password/send-otp-email/${route.params}`
       )
       .then((res) => {
         if (res.data.status === "200") {
@@ -33,41 +34,41 @@ const Verification = ({ navigation, route }) => {
   useEffect(() => {
     sendOtpEmail();
   }, []);
-  const verifyOtp = () => {
-    navigation.navigate("UpdatePassword");
-  };
-  // const verifyOtp = async () => {
-  //   if (otpCode === "") {
-  //     console.log("empty");
-  //   } else if (otpCode.length !== 4) {
-  //     console.log("not equal");
-  //   } else {
-  //     console.log(otpCode);
-
-  //     let apiResponse = await axios
-  //       .post(
-  //         `http://${verifiedApiIps.homeIP}:4000/api/email/verify-otp/${route.params}`,
-  //         {
-  //           code: otpCode,
-  //         }
-  //       )
-  //       .then((res) => {
-  //         if (res.data.status === "200") {
-  //           console.log(res.data);
-  //           alert(res.data.message);
-  //           navigation.dispatch(StackActions.replace("Verified"));
-  //           navigation.navigate("Verified");
-  //         } else if (res.data.status === "401") {
-  //           console.log(res.data);
-  //         } else if (res.data.status === "404") {
-  //           console.log("not found!");
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         alert("OTP Not Verified!");
-  //       });
-  //   }
+  // const verifyOtp = () => {
+  //   navigation.navigate("UpdatePassword");
   // };
+  const verifyOtp = async () => {
+    if (otpCode === "") {
+      console.log("empty");
+    } else if (otpCode.length !== 4) {
+      console.log("not equal");
+    } else {
+      console.log(otpCode);
+
+      let apiResponse = await axios
+        .post(
+          `http://${verifiedApiIps.homeIP}:4000/api/email/verify-otp/${route.params}`,
+          {
+            code: otpCode,
+          }
+        )
+        .then((res) => {
+          if (res.data.status === "200") {
+            console.log(res.data);
+            alert(res.data.message);
+            // navigation.dispatch(StackActions.replace("Verified"));
+            navigation.navigate("UpdatePassword");
+          } else if (res.data.status === "400") {
+            console.log(res.data);
+          } else if (res.data.status === "404") {
+            console.log("not found!");
+          }
+        })
+        .catch((error) => {
+          alert("OTP Not Verified!");
+        });
+    }
+  };
 
   const resendOtp = async () => {
     sendOtpEmail();
