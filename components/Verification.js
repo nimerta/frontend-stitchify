@@ -12,6 +12,8 @@ import axios from "axios";
 import verifiedApiIps from "../IPConfigration";
 import { StackActions } from "@react-navigation/native";
 import Ip from "../IPConfigration";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 const Verification = ({ navigation, route }) => {
   var [otpCode, setOtpCode] = useState("");
   console.log(" kdjsdh00", route.params);
@@ -19,13 +21,14 @@ const Verification = ({ navigation, route }) => {
   const sendOtpEmail = async () => {
     console.log("ldjgjhdfgjdfshgjs", route.params);
     console.log(
-      `http://${Ip.mainIp}:/api/forgot-password/send-otp-email/${route.params}`
+      `http://${Ip.mainIp}/api/forgot-password/send-otp-email/${route.params}`
     );
     let apiResponse = await axios
       .get(
-        `http://${Ip.mainIp}:/api/forgot-password/send-otp-email/${route.params}`
+        `http://${Ip.mainIp}/api/forgot-password/send-otp-email/${route.params}`
       )
       .then((res) => {
+        console.log("data: ", res.data);
         if (res.data.status === "200") {
           console.log("fdjsgjhfdsgds");
           alert(res.data.message);
@@ -53,9 +56,9 @@ const Verification = ({ navigation, route }) => {
 
       let apiResponse = await axios
         .post(
-          `http://${verifiedApiIps.homeIP}:4000/api/email/verify-otp/${route.params}`,
+          `http://${Ip.mainIp}/api/forgot-password/verify-otp/${route.params}`,
           {
-            code: otpCode,
+            otp_code: otpCode,
           }
         )
         .then((res) => {
@@ -63,9 +66,10 @@ const Verification = ({ navigation, route }) => {
             console.log(res.data);
             alert(res.data.message);
             // navigation.dispatch(StackActions.replace("Verified"));
-            navigation.navigate("UpdatePassword");
+            navigation.navigate("UpdatePassword", route.params);
           } else if (res.data.status === "400") {
             console.log(res.data);
+            alert(res.data.message);
           } else if (res.data.status === "404") {
             console.log("not found!");
           }
@@ -80,7 +84,7 @@ const Verification = ({ navigation, route }) => {
     sendOtpEmail();
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <Text style={styles.headerText}>Verification</Text>
       <Text style={styles.subHeaderText}>
         Enter your verification code that we {"\n"}sent you through your email
@@ -121,7 +125,7 @@ const Verification = ({ navigation, route }) => {
       <TouchableOpacity style={styles.verifyButton} onPress={verifyOtp}>
         <Text style={styles.buttonText}>Verify</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

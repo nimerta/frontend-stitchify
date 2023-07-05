@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -8,14 +8,18 @@ import {
   Modal,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons"; // Import Ionicons from the icon library
-
+import axios from "axios";
+import Ip from "../IPConfigration";
 const AddToCartScreen = ({ navigation, route }) => {
-  //const { design } = route.params;
+  const { design, user } = route.params;
+
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [itemTitle, setItemTitle] = useState("Dress");
-  const [itemDescrption, setItemDescrption] = useState("hbjfbdjbddb");
-  const [tailorName, setTailorName] = useState("ahmed khan");
-  const [itemPrice, setItemPrice] = useState("2000");
+  const [itemTitle, setItemTitle] = useState(design.title);
+  const [itemDescrption, setItemDescrption] = useState(design.description);
+  const [tailorName, setTailorName] = useState(design.tailor.full_name);
+  const [itemPrice, setItemPrice] = useState(design.price);
+  const [userId, setUserId] = useState(route.params.user);
+
   // const AddToCartData = {
   //   itemTitle: itemTitle,
   //   itemDescrption: itemDescrption,
@@ -31,8 +35,30 @@ const AddToCartScreen = ({ navigation, route }) => {
     console.log("Tailor clicked");
   };
 
-  const handleAddToCart = () => {
-    toggleModal();
+  const handleAddToCart = async () => {
+    var bodyData = {
+      design_id: design._id,
+      quantity: 1,
+      user_id: userId,
+    };
+    var apiResponse = await axios
+      .post(`http://${Ip.mainIp}/api/user/add-design-to-cart`, bodyData)
+      .then((onDesignAdded) => {
+        console.log("on design added: ", onDesignAdded.data);
+
+        if (onDesignAdded.data.status === "400") {
+          alert(onDesignAdded.data.message);
+        } else {
+          setIsModalVisible(true);
+          setTimeout(() => {
+            setIsModalVisible(false);
+          }, 2000);
+        }
+      })
+      .catch((onDesignAddedError) => {
+        console.log("on design added error: ", onDesignAddedError);
+      });
+    // toggleModal();
   };
 
   const handleGoBack = () => {
@@ -41,6 +67,9 @@ const AddToCartScreen = ({ navigation, route }) => {
     }
     navigation.goBack();
   };
+  useEffect(() => {
+    console.log("data route add: ", route.params.user);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -48,7 +77,12 @@ const AddToCartScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
           <FontAwesome5 name="angle-left" size={30} color="#B2B2B2" />
         </TouchableOpacity>
-        <Image source={require("../Images/blouse.jpg")} style={styles.image} />
+        <Image
+          source={{
+            uri: design.image.url,
+          }}
+          style={styles.image}
+        />
       </View>
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>{itemTitle}</Text>
@@ -58,7 +92,12 @@ const AddToCartScreen = ({ navigation, route }) => {
           style={styles.tailorContainer}
         >
           <Image
-            source={require("../Images/1234.jpg")}
+            source={{
+              uri:
+                design.tailor.image.url !== undefined
+                  ? design.tailor.image.url
+                  : "https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png",
+            }}
             style={styles.tailorImage}
           />
           <Text style={styles.tailorNameStyle}>{tailorName}</Text>
@@ -75,11 +114,13 @@ const AddToCartScreen = ({ navigation, route }) => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Image
-              source={require("../Images/blouse.jpg")}
+              source={{
+                uri: design.image.url,
+              }}
               style={styles.modalImage}
             />
-            <Text style={styles.modalTitle}>{itemTitle}</Text>
-            <Text style={styles.modalPrice}>{itemPrice}</Text>
+            <Text style={styles.modalTitle}>{design.title}</Text>
+            <Text style={styles.modalPrice}>{design.price}</Text>
             <TouchableOpacity
               onPress={() => {
                 toggleModal();
@@ -102,11 +143,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   imageContainer: {
-    position: "relative",
+    // position: "relative",
     height: "45%",
     width: "95%",
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
     alignSelf: "center",
     marginTop: 50,
     borderRadius: 20,

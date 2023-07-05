@@ -71,11 +71,11 @@ const ForgetPassword = ({ navigation }) => {
   return (
     <KeyboardAwareScrollView style={styles.Container}>
       <View style={styles.AnimationBox}>
-        <Lottie
+        {/* <Lottie
           source={require("../../Stitchify/assets/16766-forget-password-animation.json")}
           autoPlay
           loop
-        />
+        /> */}
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.labels}>Forget{"\n"}Password</Text>

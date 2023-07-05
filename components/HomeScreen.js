@@ -15,7 +15,7 @@ import Loading from "./Loaders/Loading";
 import { MaterialIcons } from "@expo/vector-icons";
 import Swiper from "react-native-swiper";
 
-const HomeScreen = () => {
+const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +33,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
+    console.log("home home data: ", route.params);
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
@@ -115,7 +116,12 @@ const HomeScreen = () => {
   const renderDesigns = ({ item }) => (
     <TouchableOpacity
       style={styles.DesignBox}
-      onPress={() => navigation.navigate("AddToCartScreen", { design: item })}
+      onPress={() =>
+        navigation.navigate("AddToCartScreen", {
+          design: item,
+          user: route.params.user,
+        })
+      }
     >
       <View style={styles.DesignView}>
         <Image style={styles.DesignImage} source={item.image}></Image>

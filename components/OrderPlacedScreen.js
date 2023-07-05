@@ -8,13 +8,13 @@ const OrderPlacedScreen = ({ navigation }) => {
   };
   return (
     <View style={styles.MainContainer}>
-      <View style={styles.AnimationBox}>
+      {/* <View style={styles.AnimationBox}>
         <Lottie
           source={require("../../Stitchify/assets/80036-done.json")}
           autoPlay
           loop
         />
-      </View>
+      </View> */}
 
       <Text style={styles.MsgTxt}>Your order has been{"\n"}accepted.</Text>
       <TouchableOpacity style={styles.btn} onPress={OnSubmit}>
