@@ -164,19 +164,19 @@ const styles = StyleSheet.create({
     color: "black",
     marginLeft: "4%",
     marginBottom: "2%",
-    marginTop: "13%",
+    marginTop: 20,
   },
   inputfield: {
     backgroundColor: "#EEF1F6",
     borderRadius: 18,
-    padding: "5%",
+    padding: 18,
     width: "95%",
     marginLeft: "2%",
   },
 
   btn1: {
     backgroundColor: "#16a085",
-    height: "6%",
+    height: "8%",
     width: "35%",
     borderRadius: 18,
     alignItems: "center",
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     // marginVertical: "10%",
     marginLeft: 250,
     // position: "relative",
-    top: -80,
+    top: -70,
     // left: 250,
   },
   btnText: {

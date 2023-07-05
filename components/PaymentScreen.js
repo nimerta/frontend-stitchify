@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-const PaymentScreen = ({ navigation }) => {
+const PaymentScreen = ({ navigation, route }) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-
+  //const { address } = route.params;
   const handlePaymentMethodSelect = (method) => {
     setSelectedPaymentMethod(method);
   };
@@ -12,7 +12,7 @@ const PaymentScreen = ({ navigation }) => {
     if (selectedPaymentMethod) {
       // Perform payment processing
       // Display success message or navigate to order confirmation screen
-      navigation.navigate("CheckoutScreen");
+      navigation.navigate("CheckoutScreen", { selectedPaymentMethod });
     } else {
       alert("Please select a payment method.");
     }

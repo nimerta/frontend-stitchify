@@ -4,7 +4,7 @@ import { Feather, FontAwesome, Ionicons, AntDesign } from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
 const OrderPlacedScreen = ({ navigation }) => {
   const OnSubmit = () => {
-    navigation.navigate("HomeScreen");
+    navigation.navigate("Main");
   };
   return (
     <View style={styles.MainContainer}>

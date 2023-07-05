@@ -16,6 +16,10 @@ const EditProfile = ({ navigation }) => {
   const [profileImage, setProfileImage] = useState(
     require("../../Stitchify/Images/2piece.jpg")
   );
+  const [fullname, setFullname] = useState("Nimerta bai");
+  const [phoneNumber, setPhoneNumber] = useState("03124567892");
+  const [email, setEmail] = useState("Nimerta bai");
+  const [gender, setGender] = useState("Female");
 
   const OnDetails = () => {
     navigation.navigate("DetailsScreen");
@@ -30,7 +34,8 @@ const EditProfile = ({ navigation }) => {
         <View style={styles.Profile}>
           <Image
             style={styles.ProfileImg}
-            source={require("../../Stitchify/Images/2piece.jpg")}
+            //source={require("../../Stitchify/Images/2piece.jpg")}
+            source={profileImage}
           />
         </View>
         <TouchableOpacity style={styles.EditOptionStyle} onPress={OnDetails}>
@@ -45,19 +50,19 @@ const EditProfile = ({ navigation }) => {
         </View>
         <View style={styles.DetailsBox}>
           <Text style={styles.SubheadingStyle}>Fullname</Text>
-          <Text style={styles.DetailsTxt}>Nimerta Bai</Text>
+          <Text style={styles.DetailsTxt}>{fullname}</Text>
         </View>
         <View style={styles.DetailsBox}>
           <Text style={styles.SubheadingStyle}>Email</Text>
-          <Text style={styles.DetailsTxt}>Nimerta@gmail.com</Text>
+          <Text style={styles.DetailsTxt}>{email}</Text>
         </View>
         <View style={styles.DetailsBox}>
           <Text style={styles.SubheadingStyle}>Gender</Text>
-          <Text style={styles.DetailsTxt}>Female</Text>
+          <Text style={styles.DetailsTxt}>{gender}</Text>
         </View>
         <View style={styles.DetailsBox}>
           <Text style={styles.SubheadingStyle}>Phone Number</Text>
-          <Text style={styles.DetailsTxt}>03123453214</Text>
+          <Text style={styles.DetailsTxt}>{phoneNumber}</Text>
         </View>
       </View>
     </View>

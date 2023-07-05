@@ -12,6 +12,17 @@ import { FontAwesome5 } from "@expo/vector-icons"; // Import Ionicons from the i
 const AddToCartScreen = ({ navigation, route }) => {
   //const { design } = route.params;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [itemTitle, setItemTitle] = useState("Dress");
+  const [itemDescrption, setItemDescrption] = useState("hbjfbdjbddb");
+  const [tailorName, setTailorName] = useState("ahmed khan");
+  const [itemPrice, setItemPrice] = useState("2000");
+  // const AddToCartData = {
+  //   itemTitle: itemTitle,
+  //   itemDescrption: itemDescrption,
+  //   itemPrice: itemPrice,
+  //   tailorName: tailorName,
+  // };
+  // //const [itemImg, setItemImg] = useState("../Images/blouse.jpg");
   const toggleModal = () => {
     setIsModalVisible(!isModalVisible);
   };
@@ -40,12 +51,8 @@ const AddToCartScreen = ({ navigation, route }) => {
         <Image source={require("../Images/blouse.jpg")} style={styles.image} />
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>Maxi Dress</Text>
-        <Text style={styles.description}>
-          Red Color with puffy sleeves and chifon fabric, boat neck, Red Color
-          with puffy sleeves and chifon fabric, boat neck , Red Color with puffy
-          sleeves and chifon fabric, boat neck
-        </Text>
+        <Text style={styles.title}>{itemTitle}</Text>
+        <Text style={styles.description}>{itemDescrption}</Text>
         <TouchableOpacity
           onPress={handleTailorClick}
           style={styles.tailorContainer}
@@ -54,9 +61,9 @@ const AddToCartScreen = ({ navigation, route }) => {
             source={require("../Images/1234.jpg")}
             style={styles.tailorImage}
           />
-          <Text style={styles.tailorName}>Ahmed khan</Text>
+          <Text style={styles.tailorNameStyle}>{tailorName}</Text>
         </TouchableOpacity>
-        <Text style={styles.price}>$99.99</Text>
+        <Text style={styles.price}>Rs{itemPrice}</Text>
         <TouchableOpacity
           onPress={handleAddToCart}
           style={styles.addToCartButton}
@@ -71,8 +78,8 @@ const AddToCartScreen = ({ navigation, route }) => {
               source={require("../Images/blouse.jpg")}
               style={styles.modalImage}
             />
-            <Text style={styles.modalTitle}>Maxi Dress</Text>
-            <Text style={styles.modalPrice}>$99.99</Text>
+            <Text style={styles.modalTitle}>{itemTitle}</Text>
+            <Text style={styles.modalPrice}>{itemPrice}</Text>
             <TouchableOpacity
               onPress={() => {
                 toggleModal();
@@ -149,7 +156,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     resizeMode: "cover",
   },
-  tailorName: {
+  tailorNameStyle: {
     fontSize: 16,
     fontWeight: "bold",
   },

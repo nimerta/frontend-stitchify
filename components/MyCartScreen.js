@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
-const MyCartScreen = ({ navigation }) => {
+const MyCartScreen = ({ navigation, route }) => {
+  //const { AddToCartData } = route.params;
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -17,13 +18,28 @@ const MyCartScreen = ({ navigation }) => {
       image: require("../Images/blouse.jpg"),
     },
   ]);
-
+  const handleRefreshCart = () => {
+    setCartItems([
+      {
+        id: 1,
+        name: "Maxi Dress",
+        price: 99.99,
+        image: require("../Images/blouse.jpg"),
+      },
+      {
+        id: 2,
+        name: "Blouse",
+        price: 49.99,
+        image: require("../Images/blouse.jpg"),
+      },
+    ]);
+  };
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => total + item.price, 0);
   };
 
   const handleCheckout = () => {
-    navigation.navigate("ShippingAddressScreen");
+    navigation.navigate("ShippingAddressScreen", { cartItems });
   };
 
   const handleDeleteCartItem = (itemId) => {
@@ -62,6 +78,12 @@ const MyCartScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckout}>
         <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.refreshButton}
+        onPress={handleRefreshCart}
+      >
+        <Text style={styles.refreshButtonText}>Refresh Cart</Text>
       </TouchableOpacity>
     </View>
   );
@@ -133,6 +155,19 @@ const styles = StyleSheet.create({
   },
   IconStyle: {
     marginTop: -35,
+  },
+  refreshButton: {
+    backgroundColor: "#16a085",
+    height: 50,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
+  },
+  refreshButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
 });
 

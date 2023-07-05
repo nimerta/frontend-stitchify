@@ -23,6 +23,9 @@ const SettingScreen = ({ navigation }) => {
   const OnAddressList = () => {
     navigation.navigate("AddressListScreen");
   };
+  const OnMeasurement = () => {
+    navigation.navigate("ViewMeasurement");
+  };
   return (
     <View style={styles.MainContainer}>
       <View style={styles.ProfileContainer}>
@@ -70,7 +73,7 @@ const SettingScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.OptionsBox}>
-          <TouchableOpacity style={styles.Options}>
+          <TouchableOpacity style={styles.Options} onPress={OnMeasurement}>
             <View style={styles.IconContainer}>
               <MaterialCommunityIcons
                 name="scissors-cutting"

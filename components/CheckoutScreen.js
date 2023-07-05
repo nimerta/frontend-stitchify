@@ -2,12 +2,15 @@ import { useState } from "react";
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 
-const CheckoutScreen = ({ navigation }) => {
+const CheckoutScreen = ({ navigation, route }) => {
+  //const { selectedPaymentMethod } = route.params;
   const [address, setAddress] = useState(
     "Hammeda heights shaheed-e-milat road karachi sindh pakistan"
   );
   const [phoneNumber, setPhoneNumber] = useState("03114567890");
   const [name, setName] = useState("Nimerta bai");
+  const [paymentMethod, setPaymentMethod] = useState("cash on delivery");
+  const [deliveryCharges, setDeliveryCharges] = useState("10");
   const cartItems = [
     {
       id: 1,
@@ -26,6 +29,9 @@ const CheckoutScreen = ({ navigation }) => {
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => total + item.price, 0);
   };
+  const calculateTotal = (subtotal, deliveryCharges) => {
+    return subtotal + deliveryCharges;
+  };
   const handlePlaceOrder = () => {
     navigation.navigate("OrderPlacedScreen");
   };
@@ -43,7 +49,7 @@ const CheckoutScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionHeading}>Shipping Address</Text>
+        <Text style={styles.sectionHeading}>Shipping Detials</Text>
         <View style={styles.shippingAddressContainer}>
           <Text style={styles.addressValue}>{name}</Text>
           <Text style={styles.addressValue}>{phoneNumber}</Text>
@@ -57,7 +63,7 @@ const CheckoutScreen = ({ navigation }) => {
           {cartItems.map(renderCartItem)}
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionHeading}>Payment Method</Text>
-            <Text style={styles.paymentMethodText}>Cash on Delivery</Text>
+            <Text style={styles.paymentMethodText}>{paymentMethod}</Text>
           </View>
           <View style={styles.orderSummaryItem}>
             <Text style={styles.orderSummaryLabel}>Subtotal:</Text>
@@ -67,11 +73,18 @@ const CheckoutScreen = ({ navigation }) => {
           </View>
           <View style={styles.orderSummaryItem}>
             <Text style={styles.orderSummaryLabel}>Delivery Charges:</Text>
-            <Text style={styles.orderSummaryValue}>$5.00</Text>
+            <Text style={styles.orderSummaryValue}>${deliveryCharges}</Text>
           </View>
           <View style={styles.orderSummaryItem}>
             <Text style={styles.orderSummaryLabel}>Total:</Text>
-            <Text style={styles.orderSummaryValue}>$104.99</Text>
+            <Text style={styles.orderSummaryValue}>
+              {" "}
+              ${" "}
+              {calculateTotal(
+                getTotalPrice(),
+                parseFloat(deliveryCharges)
+              ).toFixed(2)}
+            </Text>
           </View>
         </View>
       </View>

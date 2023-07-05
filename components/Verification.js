@@ -17,12 +17,17 @@ const Verification = ({ navigation, route }) => {
   console.log(" kdjsdh00", route.params);
 
   const sendOtpEmail = async () => {
+    console.log("ldjgjhdfgjdfshgjs", route.params);
+    console.log(
+      `http://${Ip.mainIp}:/api/forgot-password/send-otp-email/${route.params}`
+    );
     let apiResponse = await axios
       .get(
         `http://${Ip.mainIp}:/api/forgot-password/send-otp-email/${route.params}`
       )
       .then((res) => {
         if (res.data.status === "200") {
+          console.log("fdjsgjhfdsgds");
           alert(res.data.message);
         } else {
           console.log("not sent");
@@ -33,6 +38,7 @@ const Verification = ({ navigation, route }) => {
 
   useEffect(() => {
     sendOtpEmail();
+    console.log("ksdfhkjdyyeiy5853847547857497");
   }, []);
   // const verifyOtp = () => {
   //   navigation.navigate("UpdatePassword");
@@ -87,14 +93,14 @@ const Verification = ({ navigation, route }) => {
           containerStyle={styles.textInputContainer}
           textInputStyle={styles.roundedTextInput}
           inputCount={4}
-          tintColor={"blueVogue"}
+          // tintColor={"blueVogue"}
         />
       </View>
       <Text
         style={{
           textAlign: "center",
           top: "38%",
-          fontFamily: "Montserrat-medium",
+          // fontFamily: "Montserrat-medium",
           color: "gray",
           opacity: 0.8,
         }}
@@ -103,7 +109,7 @@ const Verification = ({ navigation, route }) => {
         <Text
           style={{
             color: "#16a085",
-            fontFamily: "Montserrat-regular",
+            // fontFamily: "Montserrat-regular",
             fontWeight: "bold",
           }}
           onPress={resendOtp}
@@ -138,8 +144,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 4,
     width: 60,
-    color: "blueVogue",
-    fontFamily: "Montserrat-bold",
+    color: "#2f2f",
+    // fontFamily: "Montserrat-bold",
     fontSize: 20,
   },
   otpInputContainer: {
@@ -147,18 +153,18 @@ const styles = StyleSheet.create({
     padding: 18,
   },
   headerText: {
-    fontFamily: "Montserrat-bold",
+    // fontFamily: "Montserrat-bold",
     marginTop: "30%",
     position: "absolute",
     fontSize: 35,
     marginLeft: 25,
-    color: "blueVogue",
+    // color: "blueVogue",
   },
   subHeaderText: {
     position: "absolute",
     marginTop: "50%",
     marginLeft: 25,
-    fontFamily: "Montserrat-medium",
+    // fontFamily: "Montserrat-medium",
     color: "Lynch",
     opacity: 0.8,
     lineHeight: 22,
@@ -173,7 +179,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     textAlign: "center",
-    fontFamily: "Montserrat-medium",
+    // fontFamily: "Montserrat-medium",
     marginTop: "5%",
     color: "white",
     opacity: 0.8,

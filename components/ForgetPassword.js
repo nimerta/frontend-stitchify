@@ -28,16 +28,19 @@ const ForgetPassword = ({ navigation }) => {
       email: email,
     };
     var apiResponse = await axios
-      .post(`http://${Ip.mainIp}/api/user/check-user`, bodyData)
+      .post(`http://${Ip.mainIp}/api/forgot-password/check-user`, bodyData)
       .then((onSubmit) => {
         console.log("on submit: ", onSubmit.data);
         if (onSubmit.data.status === "404") {
           console.log("on submit but not found: ", onSubmit.data);
+          setShowModal(false);
+          alert(onSubmit.data.message);
         } else {
           console.log("on success all ok:  ", onSubmit.data);
           setUsername(onSubmit.data.user.full_name);
           setUserImage(onSubmit.data.user.image.url);
           setUserEmail(onSubmit.data.email);
+          setShowModal(true);
         }
       })
       .catch((onError) => {
@@ -54,13 +57,12 @@ const ForgetPassword = ({ navigation }) => {
       return;
     } else {
       checkUser();
-      setShowModal(true);
     }
   };
 
   const handleModalYes = () => {
     setShowModal(false);
-    navigation.navigate("Verification", userEmail);
+    navigation.navigate("Verification", email);
   };
 
   const handleModalNo = () => {

@@ -12,7 +12,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 const EditAddressScreen = ({ navigation, route }) => {
   const { isEdit } = route.params;
   const [address, setAddress] = useState("");
-  const [area, setArea] = useState("");
+  const [selectedArea, setSelectedArea] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
   const [street, setStreet] = useState("");
@@ -27,7 +27,7 @@ const EditAddressScreen = ({ navigation, route }) => {
       alert("Please enter your address");
       return;
     }
-    if (!area || area.trim().length === 0) {
+    if (!selectedArea || selectedArea.trim().length === 0) {
       alert("Please select your area");
       return;
     }
@@ -85,7 +85,7 @@ const EditAddressScreen = ({ navigation, route }) => {
             value={area}
           />
         </View> */}
-        <View style={styles.inputContainer}>
+        <View>
           <Text style={styles.labels}>Area</Text>
           <View style={styles.dropdownContainer}>
             <Picker
@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
     Display: "flex",
     marginVertical: 4,
   },
+
   inputBox: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -277,15 +278,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-  dropdownContainer: {
-    backgroundColor: "#EEF1F6",
-    borderRadius: 18,
-    padding: "2%",
-    width: "95%",
-    marginLeft: "2%",
-  },
+  // dropdownContainer: {
+  //   backgroundColor: "#EEF1F6",
+  //   borderRadius: 18,
+  //   //padding: -40,
+  //   paddingTop: -10,
+  //   width: "95%",
+  //   marginLeft: "2%",
+  // },
+  // dropdownContainer: {
+  //   flex: 1, // Take available space and expand horizontally
+  //   backgroundColor: "#EEF1F6",
+  //   borderRadius: 18,
+  //   marginHorizontal: "2%", // Use marginHorizontal instead of marginLeft to add space on both sides
+  // },
   dropdown: {
     width: "100%",
-    height: 40,
+    height: 70,
+    top: -75,
   },
 });

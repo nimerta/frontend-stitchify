@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-const ShippingAddressScreen = ({ navigation }) => {
+const ShippingAddressScreen = ({ navigation, route }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
-
+  const { cartItems } = route.params;
   const addressList = [
     "Hammeda heights shaheed-e-milat road karachi sindh pakistan",
     "szabist 100 campus 2 talwar",

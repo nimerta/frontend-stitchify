@@ -14,7 +14,7 @@ import BottomNavigator from "./components/BottomNavigator";
 import ForgetPassword from "./components/ForgetPassword";
 import Verification from "./components/Verification";
 import UpdatePassword from "./components/UpdatePassword";
-
+import OrderPlacedScreen from "./components/OrderPlacedScreen";
 import EditProfile from "./components/EditProfile";
 import DetailsScreen from "./components/DetailsScreen";
 import EditAddressScreen from "./components/EditAddressScreen";
@@ -26,6 +26,7 @@ import PaymentScreen from "./components/PaymentScreen";
 import ShippingAddressScreen from "./components/ShippingAddressScreen";
 import CheckoutScreen from "./components/CheckoutScreen";
 import UpdatedMsgScreen from "./components/UpdatedMsgScreen";
+import ViewMeasurement from "./components/ViewMeasurement";
 const Stack = createNativeStackNavigator();
 
 function SplashScreen({ navigation }) {
@@ -132,7 +133,12 @@ export default function App() {
         />
         <Stack.Screen
           name="OrderPlacedScreen"
-          component={CheckoutScreen}
+          component={OrderPlacedScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewMeasurement"
+          component={ViewMeasurement}
           //options={{ headerShown: false }}
         />
       </Stack.Navigator>
