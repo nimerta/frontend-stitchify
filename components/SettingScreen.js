@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import {
   Feather,
@@ -10,9 +10,14 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
 } from "@expo/vector-icons";
-const SettingScreen = ({ navigation }) => {
+import axios from "axios";
+import Ip from "../IPConfigration";
+const SettingScreen = ({ navigation, route }) => {
+  var [userId, setUserId] = useState(route.params.data);
+  var [fullName, setFullName] = useState("");
+
   const OnEditProfile = () => {
-    navigation.navigate("EditProfile");
+    navigation.navigate("EditProfile", { data: userId });
   };
   const OnResetPassword = () => {
     navigation.navigate("UpdatePassword");
@@ -26,16 +31,35 @@ const SettingScreen = ({ navigation }) => {
   const OnMeasurement = () => {
     navigation.navigate("ViewMeasurement");
   };
+
+  var getUserData = async () => {
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
+      .then((onUserFound) => {
+        console.log("on user found: ", onUserFound.data);
+        console.log("full name: ", onUserFound.data.user.full_name);
+        setFullName(onUserFound.data.user.full_name);
+      })
+      .catch((onUserFoundError) => {
+        console.log("on user found error: ", onUserFoundError);
+      });
+  };
+
+  useEffect(() => {
+    console.log("main settings: ", userId);
+    getUserData();
+  }, []);
+
   return (
     <View style={styles.MainContainer}>
       <View style={styles.ProfileContainer}>
-        <View style={styles.Profile}>
+        {/* <View style={styles.Profile}>
           <Image
             style={styles.ProfileImg}
             source={require("../../Stitchify/Images/2piece.jpg")}
           />
-        </View>
-        <Text style={styles.NameTxt}>Nimerta bai </Text>
+        </View> */}
+        <Text style={styles.NameTxt}>{fullName}</Text>
         {/* <Text style={styles.EmailTxt}>Nimerta@gmail.com</Text> */}
       </View>
       <View style={styles.OptionsContainer}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   View,
@@ -14,15 +14,18 @@ import { Feather, FontAwesome } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import Ip from "../IPConfigration";
 const EditProfile = ({ navigation, route }) => {
-  const [profileImage, setProfileImage] = useState(
-    require("../../Stitchify/Images/2piece.jpg")
-  );
+  const [profileImage, setProfileImage] = useState();
+  // require("../../Stitchify/Images/2piece.jpg")
   const [fullname, setFullname] = useState("Nimerta bai");
   const [email, setEmail] = useState("nimerta@gmail.com");
   const [selectedGender, setSelectedGender] = useState("female");
   const [phoneNo, setPhoneNo] = useState("03123476541");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [userId, setUserId] = useState(route.params.data);
+
   const Data = {
     fullname: fullname,
     selectedGender: selectedGender,
@@ -31,7 +34,8 @@ const EditProfile = ({ navigation, route }) => {
     profileImage: profileImage,
   };
   const OnSubmit = () => {
-    navigation.navigate("EditProfile", { Data });
+    updateProfile();
+    // navigation.navigate("EditProfile", { Data });
   };
   //   if (!fullname || fullname.trim().length === 0) {
   //     alert("Please enter your full name");
@@ -114,7 +118,7 @@ const EditProfile = ({ navigation, route }) => {
     setIsModalOpen(false); // Set isModalOpen to false when profile image is updated
   };
   const deleteProfileImage = () => {
-    setProfileImage(require("../../Stitchify/Images/2piece.jpg"));
+    // setProfileImage(require("../../Stitchify/Images/2piece.jpg"));
     setIsModalOpen(false); // Set isModalOpen to false when profile image is deleted
   };
 
@@ -122,6 +126,54 @@ const EditProfile = ({ navigation, route }) => {
     Keyboard.dismiss();
     setIsModalOpen(false);
   };
+
+  var getUserData = async () => {
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
+      .then((onUserFound) => {
+        console.log("on user found: ", onUserFound.data);
+        console.log("full name: ", onUserFound.data.user.full_name);
+        setFullname(onUserFound.data.user.full_name);
+        setEmail(onUserFound.data.user.email_address);
+        setPhoneNo(onUserFound.data.user.phone_no);
+        setSelectedGender(onUserFound.data.user.gender);
+      })
+      .catch((onUserFoundError) => {
+        console.log("on user found error: ", onUserFoundError);
+      });
+  };
+
+  const updateProfile = async () => {
+    var bodyData = {
+      email_address: email,
+      full_name: fullname,
+      phone_no: phoneNo,
+      gender: selectedGender,
+    };
+    console.log("body data: ", bodyData);
+
+    var apiResponse = await axios
+      .put(`http://${Ip.mainIp}/api/user/update-user/${userId}`, bodyData)
+      .then((onUserUpdate) => {
+        console.log("on user update: ", onUserUpdate.data);
+        alert(onUserUpdate.data.message);
+        navigation.navigate("EditProfile", { data: userId });
+      })
+      .catch((onUserUpdateError) => {
+        console.log("on user update error: ", onUserUpdateError);
+      });
+  };
+
+  useEffect(() => {
+    console.log("route data: ", route.params);
+    console.log("user id: ", userId);
+
+    console.log("hfhfhfhfhfhffhfh");
+
+    getUserData();
+    console.log(" jkfdgskjfsdhgkjs");
+  }, []);
+
   return (
     <TouchableWithoutFeedback onPress={closeModal}>
       <View style={styles.MainContainer}>

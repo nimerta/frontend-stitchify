@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./HomeScreen";
 import SearchScreen from "./SearchScreen";
@@ -14,7 +14,14 @@ import AddToCartScreen from "./AddToCartScreen";
 import MyCartScreen from "./MyCartScreen";
 const Tab = createBottomTabNavigator();
 
-const BottomNavigator = () => {
+const BottomNavigator = ({ route, navigation }) => {
+  var [userId, setUserId] = useState(route.params.data.singleUser._id);
+
+  useEffect(() => {
+    console.log("data: ", route.params.data.singleUser._id);
+    console.log("user id: ", userId);
+  }, []);
+
   return (
     <Tab.Navigator
       initialRouteName="HomeScreen"
@@ -79,17 +86,26 @@ const BottomNavigator = () => {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
+        initialParams={{ user: userId }}
       />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen
         name="Cart"
         component={MyCartScreen}
         //options={{ headerShown: false }}
+        initialParams={{ user: userId }}
       />
       <Tab.Screen
         name="Settings"
         component={SettingScreen}
         options={{ headerShown: false }}
+        listeners={() => ({
+          tabPress: (e) => {
+            // Your action here
+            console.log("profile tab pressed!", userId);
+            navigation.navigate("Settings", { data: userId });
+          },
+        })}
       />
     </Tab.Navigator>
   );

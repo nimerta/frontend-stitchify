@@ -14,8 +14,8 @@ import axios from "axios";
 import { mainIp } from "../IPConfigration";
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("sejalsitani5@gmail.com");
+  const [password, setPassword] = useState("Test@@123");
   const data = {
     email: email,
     password: password,

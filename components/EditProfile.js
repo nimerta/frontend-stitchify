@@ -11,22 +11,49 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 import EditAddressScreen from "./EditAddressScreen";
-import { useState } from "react";
-const EditProfile = ({ navigation }) => {
-  const [profileImage, setProfileImage] = useState(
-    require("../../Stitchify/Images/2piece.jpg")
-  );
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+import Ip from "../IPConfigration";
+const EditProfile = ({ navigation, route }) => {
+  const [profileImage, setProfileImage] = useState();
+  // require("../../Stitchify/Images/2piece.jpg")
   const [fullname, setFullname] = useState("Nimerta bai");
   const [phoneNumber, setPhoneNumber] = useState("03124567892");
   const [email, setEmail] = useState("Nimerta bai");
   const [gender, setGender] = useState("Female");
+  const [userId, setUserId] = useState(route.params.data);
 
   const OnDetails = () => {
-    navigation.navigate("DetailsScreen");
+    navigation.navigate("DetailsScreen", { data: userId });
   };
   const OnAddressDetails = () => {
     navigation.navigate("EditAddressScreen");
   };
+
+  var getUserData = async () => {
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
+      .then((onUserFound) => {
+        console.log("on user found: ", onUserFound.data);
+        console.log("full name: ", onUserFound.data.user.full_name);
+        setFullname(onUserFound.data.user.full_name);
+        setEmail(onUserFound.data.user.email_address);
+        setPhoneNumber(onUserFound.data.user.phone_no);
+        setGender(onUserFound.data.user.gender);
+      })
+      .catch((onUserFoundError) => {
+        console.log("on user found error: ", onUserFoundError);
+      });
+  };
+
+  useEffect(() => {
+    console.log("route data: ", route.params);
+    console.log("user id: ", userId);
+
+    getUserData();
+    console.log(" jkfdgskjfsdhgkjs");
+  }, []);
 
   return (
     <View style={styles.MainContainer}>

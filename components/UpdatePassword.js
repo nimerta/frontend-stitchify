@@ -8,7 +8,9 @@ import {
 import React, { useState } from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Lottie from "lottie-react-native";
-const UpdatePassword = ({ navigation }) => {
+import axios from "axios";
+import Ip from "../IPConfigration";
+const UpdatePassword = ({ navigation, route }) => {
   const [newpassword, setNewPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
   const OnSubmit = () => {
@@ -39,18 +41,47 @@ const UpdatePassword = ({ navigation }) => {
       alert("Passwords do not match");
       return;
     } else {
-      navigation.navigate("UpdatedMsgScreen");
+      updatePasswordBackend();
+      // navigation.navigate("UpdatedMsgScreen");
     }
   };
+
+  const updatePasswordBackend = async () => {
+    var bodyData = {
+      password: newpassword,
+      confirm_password: confirmpassword,
+    };
+    var apiResponse = await axios
+      .patch(
+        `http://${Ip.mainIp}/api/forgot-password/update-password/${route.params}`,
+        bodyData
+      )
+      .then((onPasswordUpdate) => {
+        console.log("on password update: ", onPasswordUpdate.data);
+        if (onPasswordUpdate.data.success) {
+          console.log("dsjuhfjhfdsjkuhyg");
+          alert(onPasswordUpdate.data.message);
+
+          navigation.navigate("UpdatedMsgScreen");
+        } else {
+          console.log("kuhdsfuhhkfsdkjhjhkdfs");
+          alert("Can not update password");
+        }
+      })
+      .catch((onPasswordUpdateError) => {
+        console.log("on password update error: ", onPasswordUpdateError);
+      });
+  };
+
   return (
     <KeyboardAwareScrollView style={styles.Container}>
-      <View style={styles.AnimationBox}>
+      {/* <View style={styles.AnimationBox}>
         <Lottie
           source={require("../../Stitchify/assets/9068-password.json")}
           autoPlay
           loop={false}
         />
-      </View>
+      </View> */}
       <Text style={styles.UpdateHeading}>Update{"\n"}Password</Text>
       <View style={styles.inputContainer}>
         <Text style={styles.labels}>New Password</Text>
