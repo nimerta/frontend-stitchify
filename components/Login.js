@@ -64,7 +64,7 @@ const Login = ({ navigation }) => {
           }
         })
         .catch(async (onSuccessError) => {
-          console.log("ion usccess error: ", onSuccessError);
+          console.log("on usccess error: ", onSuccessError);
         });
       setEmail("");
       setPassword("");
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
     // marginVertical: "10%",
     //marginLeft: "2%",
     alignSelf: "center",
+    marginTop: 30,
   },
   btnText: {
     fontSize: 25,

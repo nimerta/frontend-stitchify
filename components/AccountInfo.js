@@ -70,7 +70,7 @@ const AccountInfo = ({ navigation, route }) => {
 
   const registerUser = async () => {
     setShowModal(false);
-    console.log(" personla data with account: ", AccountData);
+    console.log(" personal data with account: ", AccountData);
     var bodyData = {
       email: email,
       full_name: PersonalData.fullname,
@@ -99,7 +99,7 @@ const AccountInfo = ({ navigation, route }) => {
   };
 
   const registerUserAndNavigate = async () => {
-    console.log("personla data with account: ", AccountData);
+    console.log("personal data with account: ", AccountData);
     var bodyData = {
       email: email,
       full_name: PersonalData.fullname,
