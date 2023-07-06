@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,9 +9,12 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
-const AddressListScreen = ({ navigation }) => {
+import axios from "axios";
+import Ip from "../IPConfigration";
+const AddressListScreen = ({ navigation, route }) => {
   const [showModal, setShowModal] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState("");
+  const [userId, setUserId] = useState(route.params.data);
 
   const [addressList, setAddressList] = useState([
     "Hammeda heights shaheed-e-milat road karachi sindh pakistan ",
@@ -19,8 +22,12 @@ const AddressListScreen = ({ navigation }) => {
     "hello hi bye bye i dont know who are u ? where do u live ? bhad mn jao ",
   ]);
 
-  const handleAddAddress = (isEdit) => {
-    navigation.navigate("EditAddressScreen", { isEdit });
+  const handleAddAddress = (isEdit, address) => {
+    navigation.navigate("EditAddressScreen", {
+      isEdit,
+      data: userId,
+      addressObj: address,
+    });
   };
   const handleConfirmDelete = () => {
     const updatedList = addressList.filter(
@@ -33,6 +40,28 @@ const AddressListScreen = ({ navigation }) => {
     setAddressToDelete(addressList[index]);
     setShowModal(true);
   };
+
+  const getUserAddressList = async () => {
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIp}/api/address/get-user-address-list/${userId}`)
+      .then((onAddressListFound) => {
+        // console.log("on address list found: ", onAddressListFound.data);
+        const formattedAddresses = onAddressListFound.data.addresses.map(
+          (obj) => obj.formatted_address
+        );
+        console.log("formatted array: ", formattedAddresses);
+
+        setAddressList(onAddressListFound.data.addresses);
+      })
+      .catch((onAddressListFoundError) => {
+        console.log("on address list found error: ", onAddressListFoundError);
+      });
+  };
+
+  useEffect(() => {
+    console.log("address list: ", userId);
+    getUserAddressList();
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
@@ -47,10 +76,10 @@ const AddressListScreen = ({ navigation }) => {
           <View style={styles.container}>
             {addressList.map((address, index) => (
               <View key={index} style={styles.addressContainer}>
-                <Text style={styles.header}>Address {index + 1}</Text>
+                <Text style={styles.header}>Address {"kjdhgd"}</Text>
                 <View style={styles.btnsContainer}>
                   <TouchableOpacity
-                    onPress={() => handleAddAddress(true)}
+                    onPress={() => handleAddAddress(true, address)}
                     style={styles.IconBtn}
                   >
                     <Feather
@@ -76,7 +105,9 @@ const AddressListScreen = ({ navigation }) => {
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.addressDetails}>
-                  <Text style={styles.addressTxt}>{address}</Text>
+                  <Text style={styles.addressTxt}>
+                    {address.formatted_address}
+                  </Text>
                 </TouchableOpacity>
 
                 <Modal visible={showModal} animationType="slide" transparent>
@@ -108,7 +139,7 @@ const AddressListScreen = ({ navigation }) => {
 
           <TouchableOpacity
             style={styles.btn}
-            onPress={() => handleAddAddress(false)}
+            onPress={() => handleAddAddress(false, null)}
           >
             <Text style={styles.btnText}>Add Address</Text>
           </TouchableOpacity>

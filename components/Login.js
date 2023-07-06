@@ -57,7 +57,9 @@ const Login = ({ navigation }) => {
           if (onSuccess.data.status === "200") {
             console.log("Login successfully: ");
             alert("Login succesfully");
-            navigation.navigate("Main", { data: onSuccess.data });
+            navigation.navigate("Main", {
+              data: onSuccess.data.singleUser._id,
+            });
           } else {
             alert("Invalid email or password");
             console.log("error: ", onSuccess.data);
@@ -106,7 +108,13 @@ const Login = ({ navigation }) => {
       <TouchableOpacity style={styles.fp} onPress={ForgetPasswordNavigation}>
         <Text style={styles.link}>Forgot password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleSubmit} style={styles.btn1}>
+      <TouchableOpacity
+        onPress={() => {
+          handleSubmit();
+          console.log("dhdj");
+        }}
+        style={styles.btn1}
+      >
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
       <View style={styles.accText}>

@@ -26,7 +26,7 @@ const SettingScreen = ({ navigation, route }) => {
     navigation.navigate("AddToCartScreen");
   };
   const OnAddressList = () => {
-    navigation.navigate("AddressListScreen");
+    navigation.navigate("AddressListScreen", { data: userId });
   };
   const OnMeasurement = () => {
     navigation.navigate("ViewMeasurement");

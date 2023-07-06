@@ -124,7 +124,12 @@ const HomeScreen = ({ route }) => {
       }
     >
       <View style={styles.DesignView}>
-        <Image style={styles.DesignImage} source={item.image}></Image>
+        <Image
+          style={styles.DesignImage}
+          source={{
+            uri: item.image.url,
+          }}
+        ></Image>
       </View>
       <View style={styles.descriptionBox}>
         <Text style={styles.DesignTxt}>{item.title}</Text>
@@ -133,6 +138,9 @@ const HomeScreen = ({ route }) => {
     </TouchableOpacity>
   );
   return (
+    // <View>
+    //   <Text>home</Text>
+    // </View>
     <View style={styles.Container}>
       {isLoading ? (
         <Loading />

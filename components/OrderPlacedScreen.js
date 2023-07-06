@@ -2,9 +2,9 @@ import React from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather, FontAwesome, Ionicons, AntDesign } from "@expo/vector-icons";
 import Lottie from "lottie-react-native";
-const OrderPlacedScreen = ({ navigation }) => {
+const OrderPlacedScreen = ({ navigation, route }) => {
   const OnSubmit = () => {
-    navigation.navigate("Main");
+    navigation.navigate("Main", { data: route.params.data });
   };
   return (
     <View style={styles.MainContainer}>

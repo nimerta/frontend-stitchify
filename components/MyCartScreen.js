@@ -29,7 +29,14 @@ const MyCartScreen = ({ navigation, route }) => {
   };
 
   const handleCheckout = () => {
-    navigation.navigate("ShippingAddressScreen", { cartItems });
+    if (cartItems.length <= 0) {
+      alert("Cart Is Empty!");
+    } else {
+      navigation.navigate("ShippingAddressScreen", {
+        cart: cartItems,
+        data: userId,
+      });
+    }
   };
 
   const handleDeleteCartItem = async (itemId) => {

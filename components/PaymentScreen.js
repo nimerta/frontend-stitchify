@@ -1,9 +1,62 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import Ip from "../IPConfigration";
 
 const PaymentScreen = ({ navigation, route }) => {
+  const { address, cart, data } = route.params;
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-  //const { address } = route.params;
+  const [userId, setUserId] = useState(data);
+
+  const orderTypes = {
+    PLACED: "PLACED",
+    FINISHED: "FINISHED",
+    PREPARING: "PREPARING",
+    CANCELLED: "CANCELLED",
+  };
+  const paymentMethodTypes = {
+    COD: "CASH-ON-DELIVERY",
+    PICKUP: "PICKUP",
+  };
+
+  const paymentTypes = {
+    NOT_PAID: "NOT-PAID",
+    PAID: "PAID",
+  };
+
+  const getPaymentMethod = () => {
+    return selectedPaymentMethod === "Cash on Delivery"
+      ? paymentMethodTypes.COD
+      : paymentMethodTypes.PICKUP;
+  };
+
+  const getTotalPrice = () => {
+    return cart.reduce((total, item) => total + item?.item?.price, 0);
+  };
+
+  const createOrder = async () => {
+    var bodyData = {
+      user_id: userId,
+      total_amount: getTotalPrice() + 100,
+      sub_total: getTotalPrice(),
+      order_type: orderTypes.PLACED,
+      payment_type: paymentTypes.NOT_PAID,
+      address: address,
+      payment_method: getPaymentMethod(),
+    };
+    var apiResponse = await axios
+      .post(
+        `http://${Ip.mainIp}/api/standard-order/create-standard-order`,
+        bodyData
+      )
+      .then((onOrderCreate) => {
+        console.log("on order create: ", onOrderCreate.data);
+      })
+      .catch((onOrderCreateError) => {
+        console.log("on order create error: ", onOrderCreateError);
+      });
+  };
+
   const handlePaymentMethodSelect = (method) => {
     setSelectedPaymentMethod(method);
   };
@@ -12,7 +65,12 @@ const PaymentScreen = ({ navigation, route }) => {
     if (selectedPaymentMethod) {
       // Perform payment processing
       // Display success message or navigate to order confirmation screen
-      navigation.navigate("CheckoutScreen", { selectedPaymentMethod });
+      navigation.navigate("CheckoutScreen", {
+        cart: cart,
+        data: userId,
+        payment_method: getPaymentMethod(),
+        addressObj: address,
+      });
     } else {
       alert("Please select a payment method.");
     }
@@ -36,6 +94,11 @@ const PaymentScreen = ({ navigation, route }) => {
       </TouchableOpacity>
     );
   };
+
+  useEffect(() => {
+    console.log("cart: ", cart);
+    console.log("address: ", address);
+  }, []);
 
   return (
     <View style={styles.container}>
