@@ -25,7 +25,7 @@ const Verification = ({ navigation, route }) => {
     );
     let apiResponse = await axios
       .get(
-        `http://${Ip.mainIp}/api/forgot-password/send-otp-email/${route.params}`
+        `http://${Ip.mainIP}/api/forgot-password/send-otp-email/${route.params}`
       )
       .then((res) => {
         console.log("data: ", res.data);
@@ -56,7 +56,7 @@ const Verification = ({ navigation, route }) => {
 
       let apiResponse = await axios
         .post(
-          `http://${Ip.mainIp}/api/forgot-password/verify-otp/${route.params}`,
+          `http://${Ip.mainIP}/api/forgot-password/verify-otp/${route.params}`,
           {
             otp_code: otpCode,
           }

@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { mainIp } from "../IPConfigration";
+import { mainIP } from "../IPConfigration";
 import Loading from "./Loaders/Loading";
 import { MaterialIcons } from "@expo/vector-icons";
 import Swiper from "react-native-swiper";
@@ -24,7 +24,7 @@ const HomeScreen = ({ route }) => {
   const getAllDesigns = async () => {
     try {
       const response = await axios.get(
-        `http://${mainIp}/api/home/get-designs-for-you`
+        `http://${mainIP}/api/home/get-designs-for-you`
       );
       setAllDesigns(response.data.designForYou);
     } catch (error) {
@@ -47,6 +47,7 @@ const HomeScreen = ({ route }) => {
       key: "1",
       title: "Give Measurement",
       image: require("../Images/icon1.png"),
+      screen: "Measurement",
     },
     {
       key: "2",
@@ -58,6 +59,7 @@ const HomeScreen = ({ route }) => {
       key: "4",
       title: "Custom Order",
       image: require("../Images/iconOrder.png"),
+      screen: "CustomOrderScreen",
     },
   ];
 
@@ -124,7 +126,12 @@ const HomeScreen = ({ route }) => {
       }
     >
       <View style={styles.DesignView}>
-        <Image style={styles.DesignImage} source={item.image}></Image>
+        <Image
+          style={styles.DesignImage}
+          source={{
+            uri: item.image.url,
+          }}
+        ></Image>
       </View>
       <View style={styles.descriptionBox}>
         <Text style={styles.DesignTxt}>{item.title}</Text>
@@ -133,6 +140,9 @@ const HomeScreen = ({ route }) => {
     </TouchableOpacity>
   );
   return (
+    // <View>
+    //   <Text>home</Text>
+    // </View>
     <View style={styles.Container}>
       {isLoading ? (
         <Loading />
@@ -190,7 +200,15 @@ const HomeScreen = ({ route }) => {
             <View style={styles.ServicesContainer}>
               <ScrollView horizontal={true}>
                 {services.map((item) => (
-                  <TouchableOpacity key={item.key} style={styles.ServicesBox}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate(item.screen, {
+                        user: route.params.user,
+                      });
+                    }}
+                    key={item.key}
+                    style={styles.ServicesBox}
+                  >
                     <View style={styles.IconContainer}>
                       <Image
                         style={styles.IconStyle}

@@ -129,7 +129,7 @@ const EditProfile = ({ navigation, route }) => {
 
   var getUserData = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
+      .get(`http://${Ip.mainIP}/api/user/get-user/${userId}`)
       .then((onUserFound) => {
         console.log("on user found: ", onUserFound.data);
         console.log("full name: ", onUserFound.data.user.full_name);
@@ -153,7 +153,7 @@ const EditProfile = ({ navigation, route }) => {
     console.log("body data: ", bodyData);
 
     var apiResponse = await axios
-      .put(`http://${Ip.mainIp}/api/user/update-user/${userId}`, bodyData)
+      .put(`http://${Ip.mainIP}/api/user/update-user/${userId}`, bodyData)
       .then((onUserUpdate) => {
         console.log("on user update: ", onUserUpdate.data);
         alert(onUserUpdate.data.message);

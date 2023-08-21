@@ -11,11 +11,11 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import axios from "axios";
-import { mainIp } from "../IPConfigration";
+import mainIp from "../IPConfigration";
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("sejalsitani5@gmail.com");
-  const [password, setPassword] = useState("Test@@123");
+  const [email, setEmail] = useState("abc@abc.com");
+  const [password, setPassword] = useState("1234567890.");
   const data = {
     email: email,
     password: password,
@@ -50,14 +50,18 @@ const Login = ({ navigation }) => {
         password: password,
       };
 
+      console.log(`http://${mainIp.mainIP}/api/user/sign-in`);
+
       var apiResponse = await axios
-        .post(`http://${mainIp}/api/user/sign-in`, bodyData)
+        .post(`http://${mainIp.mainIP}/api/user/sign-in`, bodyData)
         .then(async (onSuccess) => {
           console.log("on success:", onSuccess.data);
           if (onSuccess.data.status === "200") {
             console.log("Login successfully: ");
             alert("Login succesfully");
-            navigation.navigate("Main", { data: onSuccess.data });
+            navigation.navigate("Main", {
+              data: onSuccess.data.singleUser._id,
+            });
           } else {
             alert("Invalid email or password");
             console.log("error: ", onSuccess.data);
@@ -106,7 +110,13 @@ const Login = ({ navigation }) => {
       <TouchableOpacity style={styles.fp} onPress={ForgetPasswordNavigation}>
         <Text style={styles.link}>Forgot password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleSubmit} style={styles.btn1}>
+      <TouchableOpacity
+        onPress={() => {
+          handleSubmit();
+          console.log("dhdj");
+        }}
+        style={styles.btn1}
+      >
         <Text style={styles.btnText}>Login</Text>
       </TouchableOpacity>
       <View style={styles.accText}>

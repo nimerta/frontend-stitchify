@@ -15,10 +15,10 @@ import MyCartScreen from "./MyCartScreen";
 const Tab = createBottomTabNavigator();
 
 const BottomNavigator = ({ route, navigation }) => {
-  var [userId, setUserId] = useState(route.params.data.singleUser._id);
+  var [userId, setUserId] = useState(route.params.data);
 
   useEffect(() => {
-    console.log("data: ", route.params.data.singleUser._id);
+    console.log("data: ", route.params.data);
     console.log("user id: ", userId);
   }, []);
 

@@ -124,7 +124,7 @@ const AddToCartScreen = ({ navigation, route }) => {
             <TouchableOpacity
               onPress={() => {
                 toggleModal();
-                navigation.navigate("MyCartScreen");
+                navigation.navigate("MyCartScreen", { user: userId });
               }}
               style={styles.viewCartButton}
             >

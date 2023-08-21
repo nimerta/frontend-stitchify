@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import axios from "axios";
+import Ip from "../IPConfigration";
 
 const ShippingAddressScreen = ({ navigation, route }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const { cartItems } = route.params;
-  const addressList = [
+  const [userId, setUserId] = useState(route.params.data);
+  const [addressList, setAddressList] = useState([
     "Hammeda heights shaheed-e-milat road karachi sindh pakistan",
     "szabist 100 campus 2 talwar",
     "hello hi bye bye i dont know who are u ? where do u live ? bhad mn jao ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-  ];
+  ]);
+
+  const { cart } = route.params;
+  const [cartData, setCartData] = useState(cart);
 
   const handleSelectAddress = (address) => {
     setSelectedAddress(address);
@@ -17,11 +22,37 @@ const ShippingAddressScreen = ({ navigation, route }) => {
   const handleProceedToPayment = () => {
     if (selectedAddress) {
       // Proceed to the payment screen
-      navigation.navigate("PaymentScreen", { address: selectedAddress });
+      navigation.navigate("PaymentScreen", {
+        address: selectedAddress,
+        cart: cartData,
+        data: userId,
+      });
     } else {
       alert("Please select an address or add a new address");
     }
   };
+
+  const getUserAddressList = async () => {
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIP}/api/address/get-user-address-list/${userId}`)
+      .then((onAddressListFound) => {
+        // console.log("on address list found: ", onAddressListFound.data);
+        const formattedAddresses = onAddressListFound.data.addresses.map(
+          (obj) => obj.formatted_address
+        );
+        console.log("formatted array: ", formattedAddresses);
+
+        setAddressList(onAddressListFound.data.addresses);
+      })
+      .catch((onAddressListFoundError) => {
+        console.log("on address list found error: ", onAddressListFoundError);
+      });
+  };
+
+  useEffect(() => {
+    getUserAddressList();
+    console.log("cart shipping: ", cartData);
+  }, []);
 
   const handleAddAddress = () => {
     // Navigate to the edit address screen
@@ -43,7 +74,9 @@ const ShippingAddressScreen = ({ navigation, route }) => {
               onPress={() => handleSelectAddress(address)}
             >
               <View style={styles.addressDetails}>
-                <Text style={styles.addressText}>{address}</Text>
+                <Text style={styles.addressText}>
+                  {address.formatted_address}
+                </Text>
               </View>
               <TouchableOpacity
                 style={[

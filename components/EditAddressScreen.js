@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -9,18 +9,57 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import axios from "axios";
+import Ip from "../IPConfigration";
 const EditAddressScreen = ({ navigation, route }) => {
-  const { isEdit } = route.params;
-  const [address, setAddress] = useState("");
-  const [selectedArea, setSelectedArea] = useState("");
-  const [state, setState] = useState("");
-  const [zipCode, setZipCode] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const { isEdit, addressObj } = route.params;
+  const [address, setAddress] = useState(
+    addressObj !== null ? addressObj.main_address : ""
+  );
+  const [selectedArea, setSelectedArea] = useState(
+    addressObj !== null ? addressObj.area : ""
+  );
+  const [state, setState] = useState(
+    addressObj !== null ? addressObj.state : ""
+  );
+  const [zipCode, setZipCode] = useState(
+    addressObj !== null ? addressObj.zip_code : ""
+  );
+  const [street, setStreet] = useState(
+    addressObj !== null ? addressObj.street : ""
+  );
+  const [city, setCity] = useState(addressObj !== null ? addressObj.city : "");
+  const [country, setCountry] = useState(
+    addressObj !== null ? addressObj.country : ""
+  );
+  const [instructions, setInstructions] = useState("abcbababcbababcbababcbab");
+  const [userId, setUserId] = useState(route.params.data);
 
   const areas = ["Area 1", "Area 2", "Area 3"];
+
+  const addNewAddress = async () => {
+    var bodyData = {
+      user_id: userId,
+      area: selectedArea,
+      main_address: address,
+      apartment_or_street: street,
+      city: city,
+      country: country,
+      state: state,
+      zip_code: zipCode,
+    };
+    var apiResponse = await axios
+      .post(`http://${Ip.mainIP}/api/address/add-new-address`, bodyData)
+      .then((onAddressSave) => {
+        console.log("on address save: ", onAddressSave.data);
+
+        alert("Address Added Successfully");
+        navigation.navigate("AddressListScreen", { data: userId });
+      })
+      .catch((onAddressSaveError) => {
+        console.log("on address save error: ", onAddressSaveError);
+      });
+  };
 
   const OnSubmit = () => {
     if (!address || address.trim().length === 0) {
@@ -55,10 +94,17 @@ const EditAddressScreen = ({ navigation, route }) => {
       alert("ZipCode should be numeric");
       return;
     } else {
-      alert("Address Added Successfully");
-      navigation.navigate("AddressListScreen");
+      addNewAddress();
+      // alert("Address Added Successfully");
+      // navigation.navigate("AddressListScreen");
     }
   };
+
+  useEffect(() => {
+    console.log("edit or add address: ", userId);
+    console.log("edit or add address: ", addressObj);
+  }, []);
+
   return (
     <KeyboardAwareScrollView style={styles.MainContainer}>
       <View style={styles.container}>

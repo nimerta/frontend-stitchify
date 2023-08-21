@@ -1,4 +1,4 @@
 var Ip = {
-  mainIp: "192.168.1.106:4000",
+  mainIP: "172.16.226.10:4000",
 };
 module.exports = Ip;

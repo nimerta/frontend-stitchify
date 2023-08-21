@@ -10,7 +10,7 @@ import {
   Modal,
   KeyboardAvoidingView,
 } from "react-native";
-import { mainIp } from "../IPConfigration";
+import mainIp from "../IPConfigration";
 
 const AccountInfo = ({ navigation, route }) => {
   const [email, setEmail] = useState("");
@@ -85,7 +85,7 @@ const AccountInfo = ({ navigation, route }) => {
     console.log("main ip :", mainIp);
     console.log(`${mainIp}/api/user/sign-up`);
     var apiResponse = await axios
-      .post(`http://${mainIp}/api/user/sign-up`, bodyData)
+      .post(`http://${mainIp.mainIP}/api/user/sign-up`, bodyData)
       .then(async (onSubmit) => {
         console.log("on submit ", onSubmit.data);
         alert("Account created successfully");

@@ -33,7 +33,7 @@ const EditProfile = ({ navigation, route }) => {
 
   var getUserData = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
+      .get(`http://${Ip.mainIP}/api/user/get-user/${userId}`)
       .then((onUserFound) => {
         console.log("on user found: ", onUserFound.data);
         console.log("full name: ", onUserFound.data.user.full_name);
