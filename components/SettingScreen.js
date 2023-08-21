@@ -15,9 +15,10 @@ import Ip from "../IPConfigration";
 const SettingScreen = ({ navigation, route }) => {
   var [userId, setUserId] = useState(route.params.data);
   var [fullName, setFullName] = useState("");
+  var [userImage, setUserImage] = useState("");
 
   const OnEditProfile = () => {
-    navigation.navigate("EditProfile", { data: userId });
+    navigation.navigate("EditProfile", { data: userId, updatedUser: null });
   };
   const OnResetPassword = () => {
     navigation.navigate("UpdatePassword");
@@ -39,6 +40,7 @@ const SettingScreen = ({ navigation, route }) => {
         console.log("on user found: ", onUserFound.data);
         console.log("full name: ", onUserFound.data.user.full_name);
         setFullName(onUserFound.data.user.full_name);
+        setUserImage(onUserFound.data.user.image.url);
       })
       .catch((onUserFoundError) => {
         console.log("on user found error: ", onUserFoundError);
@@ -48,17 +50,25 @@ const SettingScreen = ({ navigation, route }) => {
   useEffect(() => {
     console.log("main settings: ", userId);
     getUserData();
+    setInterval(() => {
+      getUserData();
+    }, 2000);
   }, []);
 
   return (
     <View style={styles.MainContainer}>
       <View style={styles.ProfileContainer}>
-        {/* <View style={styles.Profile}>
+        <View style={styles.Profile}>
           <Image
             style={styles.ProfileImg}
-            source={require("../../Stitchify/Images/2piece.jpg")}
+            source={{
+              uri:
+                userImage !== ""
+                  ? userImage
+                  : "https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png",
+            }}
           />
-        </View> */}
+        </View>
         <Text style={styles.NameTxt}>{fullName}</Text>
         {/* <Text style={styles.EmailTxt}>Nimerta@gmail.com</Text> */}
       </View>

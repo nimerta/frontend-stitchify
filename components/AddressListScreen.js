@@ -76,7 +76,7 @@ const AddressListScreen = ({ navigation, route }) => {
           <View style={styles.container}>
             {addressList.map((address, index) => (
               <View key={index} style={styles.addressContainer}>
-                <Text style={styles.header}>Address {"kjdhgd"}</Text>
+                <Text style={styles.header}>Address {index + 1}</Text>
                 <View style={styles.btnsContainer}>
                   <TouchableOpacity
                     onPress={() => handleAddAddress(true, address)}

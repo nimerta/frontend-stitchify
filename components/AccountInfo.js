@@ -88,8 +88,12 @@ const AccountInfo = ({ navigation, route }) => {
       .post(`http://${mainIp}/api/user/sign-up`, bodyData)
       .then(async (onSubmit) => {
         console.log("on submit ", onSubmit.data);
-        alert("Account created successfully");
-        navigation.navigate("Login");
+        if (onSubmit.data.alreadyExists) {
+          alert(onSubmit.data.message);
+        } else {
+          alert("Account created successfully");
+          navigation.navigate("Login");
+        }
       })
       .catch(async (onSubmitError) => {
         alert("Something went wrong!");
