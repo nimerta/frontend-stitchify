@@ -103,7 +103,10 @@ const BottomNavigator = ({ route, navigation }) => {
           tabPress: (e) => {
             // Your action here
             console.log("profile tab pressed!", userId);
-            navigation.navigate("Settings", { data: userId });
+            navigation.navigate("Settings", {
+              data: userId,
+              updatedUser: null,
+            });
           },
         })}
       />

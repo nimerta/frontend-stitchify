@@ -53,7 +53,7 @@ const UpdatePassword = ({ navigation, route }) => {
     };
     var apiResponse = await axios
       .patch(
-        `http://${Ip.mainIP}/api/forgot-password/update-password/${route.params}`,
+        `http://${Ip.mainIp}/api/forgot-password/update-password/${route.params}`,
         bodyData
       )
       .then((onPasswordUpdate) => {

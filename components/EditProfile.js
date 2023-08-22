@@ -11,18 +11,28 @@ import {
   FontAwesome,
 } from "@expo/vector-icons";
 import EditAddressScreen from "./EditAddressScreen";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useIsFocused } from "react";
 import axios from "axios";
 
 import Ip from "../IPConfigration";
 const EditProfile = ({ navigation, route }) => {
   const [profileImage, setProfileImage] = useState();
+  var { updatedUser } = route.params;
   // require("../../Stitchify/Images/2piece.jpg")
-  const [fullname, setFullname] = useState("Nimerta bai");
+  const [fullname, setFullname] = useState(
+    updatedUser !== null ? updatedUser?.full_name : "Nimerta bai"
+  );
   const [phoneNumber, setPhoneNumber] = useState("03124567892");
   const [email, setEmail] = useState("Nimerta bai");
   const [gender, setGender] = useState("Female");
+  const [userImage, setUserImage] = useState("");
+
+  const [updatedUserState, setUpdatedUserState] = useState(
+    updatedUser !== null ? updatedUser : null
+  );
+
   const [userId, setUserId] = useState(route.params.data);
+  // const isFocused = useIsFocused();
 
   const OnDetails = () => {
     navigation.navigate("DetailsScreen", { data: userId });
@@ -35,12 +45,14 @@ const EditProfile = ({ navigation, route }) => {
     var apiResponse = await axios
       .get(`http://${Ip.mainIP}/api/user/get-user/${userId}`)
       .then((onUserFound) => {
-        console.log("on user found: ", onUserFound.data);
-        console.log("full name: ", onUserFound.data.user.full_name);
+        // console.log("on user found: ", onUserFound.data);
+        // console.log("full name: ", onUserFound.data.user.full_name);
         setFullname(onUserFound.data.user.full_name);
         setEmail(onUserFound.data.user.email_address);
         setPhoneNumber(onUserFound.data.user.phone_no);
         setGender(onUserFound.data.user.gender);
+        setUserImage(onUserFound.data.user.image.url);
+        console.log("jfdgfj: ", onUserFound.data.user.image.url);
       })
       .catch((onUserFoundError) => {
         console.log("on user found error: ", onUserFoundError);
@@ -50,9 +62,18 @@ const EditProfile = ({ navigation, route }) => {
   useEffect(() => {
     console.log("route data: ", route.params);
     console.log("user id: ", userId);
-
     getUserData();
+    setInterval(() => {
+      getUserData();
+    }, 2000);
     console.log(" jkfdgskjfsdhgkjs");
+    console.log("updated user: ", updatedUserState);
+
+    if (updatedUserState !== null) {
+      console.log("updated user:");
+      // Fetch the profile data from the API
+      getUserData();
+    }
   }, []);
 
   return (
@@ -61,8 +82,12 @@ const EditProfile = ({ navigation, route }) => {
         <View style={styles.Profile}>
           <Image
             style={styles.ProfileImg}
-            //source={require("../../Stitchify/Images/2piece.jpg")}
-            source={profileImage}
+            source={{
+              uri:
+                userImage !== ""
+                  ? userImage
+                  : "https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png",
+            }}
           />
         </View>
         <TouchableOpacity style={styles.EditOptionStyle} onPress={OnDetails}>

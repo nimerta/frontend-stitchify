@@ -23,6 +23,8 @@ const EditProfile = ({ navigation, route }) => {
   const [email, setEmail] = useState("nimerta@gmail.com");
   const [selectedGender, setSelectedGender] = useState("female");
   const [phoneNo, setPhoneNo] = useState("03123476541");
+  const [userImage, setUserImage] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userId, setUserId] = useState(route.params.data);
 
@@ -87,11 +89,17 @@ const EditProfile = ({ navigation, route }) => {
         allowsEditing: true,
         aspect: [1, 1],
         quality: 1,
+        base64: true,
       });
 
       if (!result.cancelled) {
-        setProfileImageUri(result.uri);
-        navigation.navigate("ChangeProfileImageScreen", result.uri);
+        // console.log("result assets: ", result.assets[0].base64);
+
+        setProfileImageUri(result.assets[0].base64);
+        navigation.navigate("ChangeProfileImageScreen", {
+          image: result.assets[0].base64,
+          data: userId,
+        });
       }
     } catch (error) {
       console.log("Error occurred while accessing the image library:", error);
@@ -137,6 +145,7 @@ const EditProfile = ({ navigation, route }) => {
         setEmail(onUserFound.data.user.email_address);
         setPhoneNo(onUserFound.data.user.phone_no);
         setSelectedGender(onUserFound.data.user.gender);
+        setUserImage(onUserFound.data.user.image.url);
       })
       .catch((onUserFoundError) => {
         console.log("on user found error: ", onUserFoundError);
@@ -157,7 +166,10 @@ const EditProfile = ({ navigation, route }) => {
       .then((onUserUpdate) => {
         console.log("on user update: ", onUserUpdate.data);
         alert(onUserUpdate.data.message);
-        navigation.navigate("EditProfile", { data: userId });
+        navigation.navigate("EditProfile", {
+          data: userId,
+          updatedUser: onUserUpdate.data.updatedDocument,
+        });
       })
       .catch((onUserUpdateError) => {
         console.log("on user update error: ", onUserUpdateError);
@@ -179,7 +191,15 @@ const EditProfile = ({ navigation, route }) => {
       <View style={styles.MainContainer}>
         <View style={styles.ProfileContainer}>
           <View style={styles.Profile}>
-            <Image style={styles.ProfileImg} source={profileImage} />
+            <Image
+              style={styles.ProfileImg}
+              source={{
+                uri:
+                  userImage !== ""
+                    ? userImage
+                    : "https://w7.pngwing.com/pngs/205/731/png-transparent-default-avatar-thumbnail.png",
+              }}
+            />
             <TouchableOpacity
               style={styles.AddIconContainer}
               onPress={() => setIsModalOpen(true)}

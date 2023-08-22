@@ -8,9 +8,32 @@ import {
   StyleSheet,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import Ip from "../IPConfigration";
 
 const ChangeProfileImageScreen = ({ navigation, route }) => {
-  const [imageUri, setImageUri] = useState(route.params);
+  const [imageUri, setImageUri] = useState(route.params.image);
+  const [userId, setUserId] = useState(route.params.data);
+
+  var updateProfilePicture = async () => {
+    var bodyData = {
+      image: imageUri,
+    };
+    var apiResponse = await axios
+      .patch(
+        `http://${Ip.mainIp}/api/user/update-profile-picture/${userId}`,
+        bodyData
+      )
+      .then((onImageUpdate) => {
+        console.log("on image update: ", onImageUpdate);
+        alert(onImageUpdate.data.message);
+        navigation.navigate("EditProfile", { data: userId });
+      })
+      .catch((onImageUpdateError) => {
+        console.log("on image update error: ", onImageUpdateError);
+      });
+  };
+
   useEffect(() => {
     console.log(route.params);
   }, []);
@@ -70,14 +93,18 @@ const ChangeProfileImageScreen = ({ navigation, route }) => {
 
   const handleSubmit = () => {
     //api call
-    navigation.goBack();
+    // navigation.goBack();
+    updateProfilePicture();
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Change Profile Image</Text>
       {imageUri && (
-        <Image source={{ uri: imageUri }} style={styles.previewImage} />
+        <Image
+          source={{ uri: `data:image/jpeg;base64,${imageUri}` }}
+          style={styles.previewImage}
+        />
       )}
 
       <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>

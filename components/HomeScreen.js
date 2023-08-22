@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import { mainIP } from "../IPConfigration";
+import { mainIp } from "../IPConfigration";
 import Loading from "./Loaders/Loading";
 import { MaterialIcons } from "@expo/vector-icons";
 import Swiper from "react-native-swiper";
@@ -24,7 +24,7 @@ const HomeScreen = ({ route }) => {
   const getAllDesigns = async () => {
     try {
       const response = await axios.get(
-        `http://${mainIP}/api/home/get-designs-for-you`
+        `http://${mainIp}/api/home/get-designs-for-you`
       );
       setAllDesigns(response.data.designForYou);
     } catch (error) {

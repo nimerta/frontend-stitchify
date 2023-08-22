@@ -11,11 +11,11 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import axios from "axios";
-import mainIp from "../IPConfigration";
+import { mainIp } from "../IPConfigration";
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState("abc@abc.com");
-  const [password, setPassword] = useState("1234567890.");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const data = {
     email: email,
     password: password,
@@ -50,10 +50,10 @@ const Login = ({ navigation }) => {
         password: password,
       };
 
-      console.log(`http://${mainIp.mainIP}/api/user/sign-in`);
+      console.log(`http://${mainIp}/api/user/sign-in`);
 
       var apiResponse = await axios
-        .post(`http://${mainIp.mainIP}/api/user/sign-in`, bodyData)
+        .post(`http://${mainIp}/api/user/sign-in`, bodyData)
         .then(async (onSuccess) => {
           console.log("on success:", onSuccess.data);
           if (onSuccess.data.status === "200") {

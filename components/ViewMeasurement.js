@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ShirtSize from "../Images/kurta1.jpg";
 import TrouserSize from "../Images/trouser.png";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { mainIP } from "../IPConfigration";
+import { mainIp } from "../IPConfigration";
 
 import {
   View,

@@ -6,11 +6,7 @@ import Ip from "../IPConfigration";
 const ShippingAddressScreen = ({ navigation, route }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [userId, setUserId] = useState(route.params.data);
-  const [addressList, setAddressList] = useState([
-    "Hammeda heights shaheed-e-milat road karachi sindh pakistan",
-    "szabist 100 campus 2 talwar",
-    "hello hi bye bye i dont know who are u ? where do u live ? bhad mn jao ghhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh",
-  ]);
+  const [addressList, setAddressList] = useState([]);
 
   const { cart } = route.params;
   const [cartData, setCartData] = useState(cart);
@@ -34,7 +30,7 @@ const ShippingAddressScreen = ({ navigation, route }) => {
 
   const getUserAddressList = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIP}/api/address/get-user-address-list/${userId}`)
+      .get(`http://${Ip.mainIp}/api/address/get-user-address-list/${userId}`)
       .then((onAddressListFound) => {
         // console.log("on address list found: ", onAddressListFound.data);
         const formattedAddresses = onAddressListFound.data.addresses.map(
@@ -56,7 +52,10 @@ const ShippingAddressScreen = ({ navigation, route }) => {
 
   const handleAddAddress = () => {
     // Navigate to the edit address screen
-    navigation.navigate("EditAddressScreen");
+    navigation.navigate("EditAddressScreen", {
+      isEdit: false,
+      addressObj: null,
+    });
   };
 
   return (
@@ -185,6 +184,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 10,
   },
   proceedButtonText: {
     color: "#fff",

@@ -35,7 +35,7 @@ const EditAddressScreen = ({ navigation, route }) => {
   const [instructions, setInstructions] = useState("abcbababcbababcbababcbab");
   const [userId, setUserId] = useState(route.params.data);
 
-  const areas = ["Area 1", "Area 2", "Area 3"];
+  const areas = ["Clifton", "Saddar", "Gulshan - E - Iqbal"];
 
   const addNewAddress = async () => {
     var bodyData = {
@@ -204,7 +204,7 @@ const EditAddressScreen = ({ navigation, route }) => {
             />
           </View>
         </View>
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
           <Text style={styles.labels}>Instructions (Optional)</Text>
           <View style={styles.inputfieldContainer}>
             <TextInput
@@ -218,7 +218,7 @@ const EditAddressScreen = ({ navigation, route }) => {
               numberOfLines={2}
             />
           </View>
-        </View>
+        </View> */}
         <TouchableOpacity
           style={styles.btn1}
           onPress={OnSubmit}
