@@ -32,6 +32,7 @@ import SliderScreen from "./components/SliderScreen";
 import CustomShippingAddress from "./components/CustomShippingAddress";
 import ViewCustomOrder from "./components/ViewCustomOrder";
 import CustomOrderCheckout from "./components/CustomOrderCheckout";
+import StandardOrderHistory from "./components/StandardOrderHistory";
 const Stack = createNativeStackNavigator();
 import { StackActions } from "@react-navigation/native";
 
@@ -171,6 +172,11 @@ export default function App() {
         <Stack.Screen
           name="ViewCustomOrder"
           component={ViewCustomOrder}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="StandardOrderHistory"
+          component={StandardOrderHistory}
           //options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -33,8 +33,8 @@ const SettingScreen = ({ navigation, route }) => {
   const OnResetPassword = () => {
     navigation.navigate("UpdatePassword");
   };
-  const OnCart = () => {
-    navigation.navigate("AddToCartScreen");
+  const OnStandardOrder = () => {
+    navigation.navigate("StandardOrderHistory");
   };
   const OnAddressList = () => {
     navigation.navigate("AddressListScreen", { data: userId });
@@ -165,7 +165,7 @@ const SettingScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.OptionsBox}>
-          <TouchableOpacity style={styles.Options}>
+          <TouchableOpacity style={styles.Options} onPress={OnStandardOrder}>
             <View style={styles.IconContainer}>
               <Octicons name="checklist" size={20} color="#16a085" />
             </View>
