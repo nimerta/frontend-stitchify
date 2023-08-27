@@ -15,12 +15,22 @@ const AddressListScreen = ({ navigation, route }) => {
   const [showModal, setShowModal] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState("");
   const [userId, setUserId] = useState(route.params.data);
-
+  const [refreshList, setRefreshList] = useState(false);
   const [addressList, setAddressList] = useState([
     "Hammeda heights shaheed-e-milat road karachi sindh pakistan ",
     "szabist 100 campus 2 talwar",
     "hello hi bye bye i dont know who are u ? where do u live ? bhad mn jao ",
   ]);
+  const handleRefresh = () => {
+    getUserAddressList();
+    // Toggle the refreshList state to trigger useEffect
+    setRefreshList(!refreshList);
+  };
+
+  // useEffect(() => {
+
+  //   getUserAddressList();
+  // }, [refreshList]);
 
   const handleAddAddress = (isEdit, address) => {
     navigation.navigate("EditAddressScreen", {
@@ -42,10 +52,12 @@ const AddressListScreen = ({ navigation, route }) => {
   };
 
   const getUserAddressList = async () => {
+    console.log(userId);
     var apiResponse = await axios
       .get(`http://${Ip.mainIp}/api/address/get-user-address-list/${userId}`)
       .then((onAddressListFound) => {
         // console.log("on address list found: ", onAddressListFound.data);
+
         const formattedAddresses = onAddressListFound.data.addresses.map(
           (obj) => obj.formatted_address
         );
@@ -59,6 +71,7 @@ const AddressListScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
+    console.log("hrghhj", route.params);
     console.log("address list: ", userId);
     getUserAddressList();
   }, []);
@@ -67,7 +80,7 @@ const AddressListScreen = ({ navigation, route }) => {
     <View style={styles.mainContainer}>
       {addressList.length === 0 && (
         <TouchableOpacity style={styles.btn} onPress={handleAddAddress}>
-          <Text style={styles.btnText}>Add Address</Text>
+          <Text style={styles.btnText}>Add Address </Text>
         </TouchableOpacity>
       )}
 
@@ -145,13 +158,30 @@ const AddressListScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </>
       )}
+      <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
+        <Text style={styles.refreshButtonText}>Refresh Address List</Text>
+      </TouchableOpacity>
     </View>
   );
 };
 
-export default AddressListScreen;
-
 const styles = StyleSheet.create({
+  refreshButton: {
+    backgroundColor: "#16a085",
+    borderRadius: 18,
+    padding: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+    width: "95%",
+    alignSelf: "center",
+    top: -30,
+  },
+  refreshButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: "#F2F2F2",
@@ -223,6 +253,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginBottom: 10,
+    top: -40,
   },
   btnText: {
     fontSize: 25,
@@ -268,3 +299,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+export default AddressListScreen;

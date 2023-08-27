@@ -45,7 +45,7 @@ const MyCartScreen = ({ navigation, route }) => {
       user_id: userId,
     };
     var apiResponse = await axios
-      .post(`http://${Ip.mainIP}/api/user/remove-design-from-cart`, bodyData)
+      .post(`http://${Ip.mainIp}/api/user/remove-design-from-cart`, bodyData)
       .then((onDesignRemoved) => {
         console.log("on design removed: ", onDesignRemoved.data);
         if (onDesignRemoved.data.success) {
@@ -64,7 +64,7 @@ const MyCartScreen = ({ navigation, route }) => {
 
   const getUserCart = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIP}/api/user/get-user-cart/${userId}`)
+      .get(`http://${Ip.mainIp}/api/user/get-user-cart/${userId}`)
       .then((onCartFound) => {
         console.log("on cart found: ", onCartFound.data);
 

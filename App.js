@@ -28,6 +28,10 @@ import CheckoutScreen from "./components/CheckoutScreen";
 import UpdatedMsgScreen from "./components/UpdatedMsgScreen";
 import ViewMeasurement from "./components/ViewMeasurement";
 import CustomOrderScreen from "./components/CustomOrderScreen";
+import SliderScreen from "./components/SliderScreen";
+import CustomShippingAddress from "./components/CustomShippingAddress";
+import ViewCustomOrder from "./components/ViewCustomOrder";
+import CustomOrderCheckout from "./components/CustomOrderCheckout";
 const Stack = createNativeStackNavigator();
 
 function SplashScreen({ navigation }) {
@@ -145,6 +149,27 @@ export default function App() {
         <Stack.Screen
           name="CustomOrderScreen"
           component={CustomOrderScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SliderScreen"
+          component={SliderScreen}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CustomShippingAddress"
+          component={CustomShippingAddress}
+          //options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="CustomOrderCheckout"
+          component={CustomOrderCheckout}
+          //options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewCustomOrder"
+          component={ViewCustomOrder}
           //options={{ headerShown: false }}
         />
       </Stack.Navigator>

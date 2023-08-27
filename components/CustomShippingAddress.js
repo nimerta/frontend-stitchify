@@ -1,44 +1,50 @@
-import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
 import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Ip from "../IPConfigration";
-
-const ShippingAddressScreen = ({ navigation, route }) => {
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+const CustomShippingAddress = ({ navigation, route }) => {
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [userId, setUserId] = useState(route.params.data);
   const [addressList, setAddressList] = useState([]);
-
-  const { cart } = route.params;
-  const [cartData, setCartData] = useState(cart);
-
+  const [routeData, setRouteData] = useState(route.params.data);
+  const [user_id, setUserId] = useState(route.params.data.userId);
+  const { customOrderData } = route.params;
   const handleSelectAddress = (address) => {
     setSelectedAddress(address);
   };
 
   const handleProceedToPayment = () => {
     if (selectedAddress) {
+      const customOrderData = {
+        address: selectedAddress,
+        customData: routeData,
+        isCustom: true,
+      };
       // Proceed to the payment screen
       navigation.navigate("PaymentScreen", {
         address: selectedAddress,
-        cart: cartData,
-        data: userId,
+        customOrderData: customOrderData,
       });
     } else {
       alert("Please select an address or add a new address");
     }
   };
 
+  const handleAddAddress = () => {
+    // Navigate to the edit address screen
+    navigation.navigate("EditAddressScreen", {
+      isEdit: false,
+    });
+  };
+
   const getUserAddressList = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIp}/api/address/get-user-address-list/${userId}`)
+      .get(
+        `http://${Ip.mainIp}/api/address/get-user-address-list/${route.params.data.userId}`
+      )
       .then((onAddressListFound) => {
-        // console.log("on address list found: ", onAddressListFound.data);
+        console.log("on address list found: ", onAddressListFound.data);
+
         const formattedAddresses = onAddressListFound.data.addresses.map(
           (obj) => obj.formatted_address
         );
@@ -52,20 +58,12 @@ const ShippingAddressScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
+    console.log("route data: ", routeData);
     getUserAddressList();
-    console.log("cart shipping: ", cartData);
   }, []);
 
-  const handleAddAddress = () => {
-    // Navigate to the edit address screen
-    navigation.navigate("EditAddressScreen", {
-      isEdit: false,
-      addressObj: null,
-    });
-  };
-
   return (
-    <ScrollView style={styles.container}>
+    <KeyboardAwareScrollView style={styles.container}>
       <Text style={styles.title}>Select Shipping Address</Text>
       {addressList && addressList.length > 0 ? (
         addressList.map((address, index) => (
@@ -108,7 +106,7 @@ const ShippingAddressScreen = ({ navigation, route }) => {
       >
         <Text style={styles.proceedButtonText}>Proceed to Payment</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -141,12 +139,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectedAddressContainer: {
-    //borderColor: "#16a085",
     backgroundColor: "#B8B8B8",
   },
   addressDetails: {
     flex: 1,
-    //backgroundColor: "#F2F2F2",
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 10,
@@ -199,4 +195,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShippingAddressScreen;
+export default CustomShippingAddress;

@@ -85,7 +85,7 @@ const AccountInfo = ({ navigation, route }) => {
     console.log("main ip :", mainIp);
     console.log(`${mainIp}/api/user/sign-up`);
     var apiResponse = await axios
-      .post(`http://${mainIp.mainIP}/api/user/sign-up`, bodyData)
+      .post(`http://${mainIp.mainIp}/api/user/sign-up`, bodyData)
       .then(async (onSubmit) => {
         console.log("on submit ", onSubmit.data);
         if (onSubmit.data.alreadyExists) {

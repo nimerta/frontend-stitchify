@@ -175,10 +175,10 @@ const styles = StyleSheet.create({
   },
   verifyButton: {
     width: "90%",
-    height: "7%",
+    height: "12%",
     backgroundColor: "#16a085",
     alignSelf: "center",
-    top: "40%",
+    top: "50%",
     borderRadius: 15,
   },
   buttonText: {

@@ -33,7 +33,7 @@ const HomeScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    console.log("home home data: ", route.params);
+    console.log("home home data: ", route.params.user);
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
@@ -54,12 +54,18 @@ const HomeScreen = ({ route }) => {
       title: "Tailor Made Designs",
       image: require("../Images/icon2.png"),
     },
-    { key: "3", title: "Dupatta pico", image: require("../Images/icon4.png") },
+    {
+      key: "3",
+      title: "Dupatta pico",
+      image: require("../Images/icon4.png"),
+      screen: "CustomOrderCheckout",
+    },
     {
       key: "4",
       title: "Custom Order",
       image: require("../Images/iconOrder.png"),
       screen: "CustomOrderScreen",
+      userId: route.params.user,
     },
   ];
 

@@ -28,7 +28,7 @@ const ForgetPassword = ({ navigation }) => {
       email: email,
     };
     var apiResponse = await axios
-      .post(`http://${Ip.mainIP}/api/forgot-password/check-user`, bodyData)
+      .post(`http://${Ip.mainIp}/api/forgot-password/check-user`, bodyData)
       .then((onSubmit) => {
         console.log("on submit: ", onSubmit.data);
         if (onSubmit.data.status === "404") {

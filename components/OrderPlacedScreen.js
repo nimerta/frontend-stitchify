@@ -8,15 +8,15 @@ const OrderPlacedScreen = ({ navigation, route }) => {
   };
   return (
     <View style={styles.MainContainer}>
-      {/* <View style={styles.AnimationBox}>
+      <View style={styles.AnimationBox}>
         <Lottie
           source={require("../../Stitchify/assets/80036-done.json")}
           autoPlay
           loop
         />
-      </View> */}
+      </View>
 
-      <Text style={styles.MsgTxt}>Your order has been{"\n"}accepted.</Text>
+      <Text style={styles.MsgTxt}>Your order has been{"\n"}placed.</Text>
       <TouchableOpacity style={styles.btn} onPress={OnSubmit}>
         <Text style={styles.btnText}>Go back to Homescreen</Text>
       </TouchableOpacity>

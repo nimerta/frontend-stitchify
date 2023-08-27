@@ -16,7 +16,7 @@ import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import Ip from "../IPConfigration";
-const EditProfile = ({ navigation, route }) => {
+const DetailsScreen = ({ navigation, route }) => {
   const [profileImage, setProfileImage] = useState();
   // require("../../Stitchify/Images/2piece.jpg")
   const [fullname, setFullname] = useState("Nimerta bai");
@@ -137,7 +137,7 @@ const EditProfile = ({ navigation, route }) => {
 
   var getUserData = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIP}/api/user/get-user/${userId}`)
+      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
       .then((onUserFound) => {
         console.log("on user found: ", onUserFound.data);
         console.log("full name: ", onUserFound.data.user.full_name);
@@ -449,4 +449,4 @@ const styles = StyleSheet.create({
     color: "#16a085",
   },
 });
-export default EditProfile;
+export default DetailsScreen;

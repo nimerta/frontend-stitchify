@@ -30,8 +30,8 @@ const CheckoutScreen = ({ navigation, route }) => {
 
   const { cart, data, addressObj, payment_method } = route.params;
   const [address, setAddress] = useState(addressObj.formatted_address);
-  const [phoneNumber, setPhoneNumber] = useState("03114567890");
-  const [name, setName] = useState("Nimerta bai");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState("");
   const [userId, setUserId] = useState(data);
 
   const [paymentMethod, setPaymentMethod] = useState(payment_method);
@@ -68,7 +68,7 @@ const CheckoutScreen = ({ navigation, route }) => {
     };
     var apiResponse = await axios
       .post(
-        `http://${Ip.mainIP}/api/standard-order/create-standard-order`,
+        `http://${Ip.mainIp}/api/standard-order/create-standard-order`,
         bodyData
       )
       .then((onOrderCreate) => {

@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  ScrollView,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -13,6 +14,7 @@ import axios from "axios";
 import Ip from "../IPConfigration";
 const EditAddressScreen = ({ navigation, route }) => {
   const { isEdit, addressObj } = route.params;
+
   const [address, setAddress] = useState(
     addressObj !== null ? addressObj.main_address : ""
   );
@@ -35,7 +37,7 @@ const EditAddressScreen = ({ navigation, route }) => {
   const [instructions, setInstructions] = useState("abcbababcbababcbababcbab");
   const [userId, setUserId] = useState(route.params.data);
 
-  const areas = ["Clifton", "Saddar", "Gulshan - E - Iqbal"];
+  const areas = ["Clifton", "Saddar", "Gulshan - E - Iqbal", "Tariq road"];
 
   const addNewAddress = async () => {
     var bodyData = {
@@ -48,17 +50,37 @@ const EditAddressScreen = ({ navigation, route }) => {
       state: state,
       zip_code: zipCode,
     };
-    var apiResponse = await axios
-      .post(`http://${Ip.mainIP}/api/address/add-new-address`, bodyData)
-      .then((onAddressSave) => {
-        console.log("on address save: ", onAddressSave.data);
+    console.log("edit add screen", bodyData);
 
-        alert("Address Added Successfully");
-        navigation.navigate("AddressListScreen", { data: userId });
-      })
-      .catch((onAddressSaveError) => {
-        console.log("on address save error: ", onAddressSaveError);
-      });
+    if (isEdit) {
+      console.log("edit waro saman haldo payo aa");
+      var apiResponse = await axios
+        .put(
+          `http://${Ip.mainIp}/api/address/update-address/${addressObj?._id}`,
+          bodyData
+        )
+        .then((onAddressEdit) => {
+          console.log("on address edit: ", onAddressEdit.data);
+
+          alert("Address Updated Successfully");
+          navigation.navigate("AddressListScreen", { data: userId });
+        })
+        .catch((onAddressSaveError) => {
+          console.log("on address edit error: ", onAddressSaveError);
+        });
+    } else {
+      var apiResponse = await axios
+        .post(`http://${Ip.mainIp}/api/address/add-new-address`, bodyData)
+        .then((onAddressSave) => {
+          console.log("on address save: ", onAddressSave.data);
+
+          alert("Address Added Successfully");
+          navigation.navigate("AddressListScreen", { data: userId });
+        })
+        .catch((onAddressSaveError) => {
+          console.log("on address save error: ", onAddressSaveError);
+        });
+    }
   };
 
   const OnSubmit = () => {
@@ -106,31 +128,9 @@ const EditAddressScreen = ({ navigation, route }) => {
   }, []);
 
   return (
-    <KeyboardAwareScrollView style={styles.MainContainer}>
+    <ScrollView style={styles.MainContainer}>
       <View style={styles.container}>
         <Text style={styles.HeadingStyle}>Address Details</Text>
-        <View style={styles.inputContainer}>
-          <Text style={styles.labels}>Address</Text>
-          <TextInput
-            placeholder="Enter your Address"
-            style={styles.inputfield}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={setAddress}
-            value={address}
-          />
-        </View>
-        {/* <View style={styles.inputContainer}>
-          <Text style={styles.labels}>Area</Text>
-          <TextInput
-            placeholder="Enter your Area"
-            style={styles.inputfield}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={setArea}
-            value={area}
-          />
-        </View> */}
         <View>
           <Text style={styles.labels}>Area</Text>
           <View style={styles.dropdownContainer}>
@@ -144,6 +144,17 @@ const EditAddressScreen = ({ navigation, route }) => {
               ))}
             </Picker>
           </View>
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.labels}>Address</Text>
+          <TextInput
+            placeholder="Enter your Address"
+            style={styles.inputfield}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={setAddress}
+            value={address}
+          />
         </View>
         <View style={styles.inputContainer}>
           <Text style={styles.labels}>Apartment</Text>
@@ -227,7 +238,7 @@ const EditAddressScreen = ({ navigation, route }) => {
           <Text style={styles.btnText}>{isEdit ? "Save changes" : "Add"}</Text>
         </TouchableOpacity>
       </View>
-    </KeyboardAwareScrollView>
+    </ScrollView>
   );
 };
 export default EditAddressScreen;
@@ -317,27 +328,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
-    marginTop: 75,
   },
   btnText: {
     fontSize: 25,
     fontWeight: "bold",
     color: "white",
   },
-  // dropdownContainer: {
-  //   backgroundColor: "#EEF1F6",
-  //   borderRadius: 18,
-  //   //padding: -40,
-  //   paddingTop: -10,
-  //   width: "95%",
-  //   marginLeft: "2%",
-  // },
-  // dropdownContainer: {
-  //   flex: 1, // Take available space and expand horizontally
-  //   backgroundColor: "#EEF1F6",
-  //   borderRadius: 18,
-  //   marginHorizontal: "2%", // Use marginHorizontal instead of marginLeft to add space on both sides
-  // },
+
   dropdown: {
     width: "100%",
     height: 70,

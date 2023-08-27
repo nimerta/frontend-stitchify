@@ -43,7 +43,7 @@ const EditProfile = ({ navigation, route }) => {
 
   var getUserData = async () => {
     var apiResponse = await axios
-      .get(`http://${Ip.mainIP}/api/user/get-user/${userId}`)
+      .get(`http://${Ip.mainIp}/api/user/get-user/${userId}`)
       .then((onUserFound) => {
         // console.log("on user found: ", onUserFound.data);
         // console.log("full name: ", onUserFound.data.user.full_name);
@@ -63,17 +63,17 @@ const EditProfile = ({ navigation, route }) => {
     console.log("route data: ", route.params);
     console.log("user id: ", userId);
     getUserData();
-    setInterval(() => {
-      getUserData();
-    }, 2000);
+    // setInterval(() => {
+    // getUserData();
+    // }, 2000);
     console.log(" jkfdgskjfsdhgkjs");
     console.log("updated user: ", updatedUserState);
 
-    if (updatedUserState !== null) {
-      console.log("updated user:");
-      // Fetch the profile data from the API
-      getUserData();
-    }
+    // if (updatedUserState !== null) {
+    //   console.log("updated user:");
+    //   // Fetch the profile data from the API
+    //   getUserData();
+    // }
   }, []);
 
   return (

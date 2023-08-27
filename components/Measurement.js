@@ -60,7 +60,7 @@ const Measurement = ({ navigation, route }) => {
 
     var api = await axios
       .patch(
-        `http://${mainIP}/api/user/submit-measurement/${user_id}`,
+        `http://${Ip.mainIp}/api/user/submit-measurement/${user_id}`,
         MeasurementData
       )
       .then(async (onMeasurementSubmit) => {

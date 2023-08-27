@@ -50,9 +50,9 @@ const SettingScreen = ({ navigation, route }) => {
   useEffect(() => {
     console.log("main settings: ", userId);
     getUserData();
-    setInterval(() => {
-      getUserData();
-    }, 2000);
+    // setInterval(() => {
+    //   getUserData();
+    // }, 2000);
   }, []);
 
   return (
@@ -126,7 +126,18 @@ const SettingScreen = ({ navigation, route }) => {
             <View style={styles.IconContainer}>
               <Octicons name="checklist" size={20} color="#16a085" />
             </View>
-            <Text style={styles.OptionsTxt}>Order History</Text>
+            <Text style={styles.OptionsTxt}>Standard order History</Text>
+            <View style={styles.RightIconContainer}>
+              <AntDesign name="right" size={19} color="#202020" />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.OptionsBox}>
+          <TouchableOpacity style={styles.Options}>
+            <View style={styles.IconContainer}>
+              <Octicons name="checklist" size={20} color="#16a085" />
+            </View>
+            <Text style={styles.OptionsTxt}>Custom order History</Text>
             <View style={styles.RightIconContainer}>
               <AntDesign name="right" size={19} color="#202020" />
             </View>
