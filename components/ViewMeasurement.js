@@ -19,10 +19,10 @@ import axios from "axios";
 import Ip from "../IPConfigration";
 
 const ViewMeasurement = ({ navigation, route }) => {
-  const [shirtLength, setShirtLength] = useState("22");
-  const [shoulder, setShoulder] = useState("20");
+  const [shirtLength, setShirtLength] = useState("");
+  const [shoulder, setShoulder] = useState("");
   const [sleeveLength, setSleeveLength] = useState("");
-  const [sleeveOpening, setSleeveOpening] = useState("");
+  const [sleeveOpening, setSleeveOpening] = useState("12");
   const [bust, setBust] = useState("");
   const [waist, setWaist] = useState("");
   const [hips, setHips] = useState("");
@@ -32,7 +32,7 @@ const ViewMeasurement = ({ navigation, route }) => {
   const [inseam, setInseam] = useState("");
   const [thighs, setThighs] = useState("");
   const [trouserHip, setTrouserHip] = useState("");
-  const [legOpening, setLegOpening] = useState("10");
+  const [legOpening, setLegOpening] = useState("");
   const [trouserRise, setTrouserRise] = useState("");
 
   const user_id = route.params.data;

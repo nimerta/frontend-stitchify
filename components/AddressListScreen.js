@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Feather } from "@expo/vector-icons";
 import axios from "axios";
 import Ip from "../IPConfigration";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const AddressListScreen = ({ navigation, route }) => {
   const [showModal, setShowModal] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState("");
@@ -77,7 +78,7 @@ const AddressListScreen = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={styles.mainContainer}>
+    <KeyboardAwareScrollView style={styles.mainContainer}>
       {addressList.length === 0 && (
         <TouchableOpacity style={styles.btn} onPress={handleAddAddress}>
           <Text style={styles.btnText}>Add Address </Text>
@@ -161,7 +162,7 @@ const AddressListScreen = ({ navigation, route }) => {
       <TouchableOpacity style={styles.refreshButton} onPress={handleRefresh}>
         <Text style={styles.refreshButtonText}>Refresh Address List</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: "95%",
     alignSelf: "center",
-    top: -30,
+    //top: -30,
   },
   refreshButtonText: {
     color: "#fff",
@@ -188,11 +189,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 10,
+    //paddingTop: 10,
     paddingHorizontal: 10,
   },
   addressContainer: {
-    marginBottom: 10,
+    marginBottom: 8,
   },
   header: {
     fontSize: 18,
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignSelf: "center",
     marginBottom: 10,
-    top: -40,
+    //top: -40,
   },
   btnText: {
     fontSize: 25,
