@@ -161,8 +161,10 @@ const DetailsScreen = ({ navigation, route }) => {
     };
     console.log("body data: ", bodyData);
 
+    console.log(`http://${Ip.mainIp}/api/user/update-user/${userId}`);
+
     var apiResponse = await axios
-      .put(`http://${Ip.mainIP}/api/user/update-user/${userId}`, bodyData)
+      .put(`http://${Ip.mainIp}/api/user/update-user/${userId}`, bodyData)
       .then((onUserUpdate) => {
         console.log("on user update: ", onUserUpdate.data);
         alert(onUserUpdate.data.message);

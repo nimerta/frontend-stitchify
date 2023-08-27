@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import {
   Feather,
   FontAwesome5,
@@ -12,10 +19,13 @@ import {
 } from "@expo/vector-icons";
 import axios from "axios";
 import Ip from "../IPConfigration";
+import { StackActions } from "@react-navigation/native";
+
 const SettingScreen = ({ navigation, route }) => {
   var [userId, setUserId] = useState(route.params.data);
   var [fullName, setFullName] = useState("");
   var [userImage, setUserImage] = useState("");
+  var [showModal, setShowModal] = useState(false);
 
   const OnEditProfile = () => {
     navigation.navigate("EditProfile", { data: userId, updatedUser: null });
@@ -30,7 +40,7 @@ const SettingScreen = ({ navigation, route }) => {
     navigation.navigate("AddressListScreen", { data: userId });
   };
   const OnMeasurement = () => {
-    navigation.navigate("ViewMeasurement");
+    navigation.navigate("ViewMeasurement", { data: userId });
   };
 
   var getUserData = async () => {
@@ -45,6 +55,13 @@ const SettingScreen = ({ navigation, route }) => {
       .catch((onUserFoundError) => {
         console.log("on user found error: ", onUserFoundError);
       });
+  };
+
+  const logoutAndNavigate = () => {
+    navigation.dispatch(StackActions.replace("Main"));
+    navigation.navigate("Login");
+    setShowModal(!showModal);
+    // navigation.navigate("Login");
   };
 
   useEffect(() => {
@@ -72,6 +89,32 @@ const SettingScreen = ({ navigation, route }) => {
         <Text style={styles.NameTxt}>{fullName}</Text>
         {/* <Text style={styles.EmailTxt}>Nimerta@gmail.com</Text> */}
       </View>
+      <Modal visible={showModal} transparent={true} animationType="fade">
+        <View style={styles.modalView1}>
+          <View style={styles.modalView2}>
+            <Text>Are yous sure you want to logout?</Text>
+            <View style={styles.modalText}>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log("toji marzi bhala");
+                  setShowModal(!showModal);
+                }}
+              >
+                <Text>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  console.log("1");
+                  logoutAndNavigate();
+                  setShowModal(false);
+                }}
+              >
+                <Text>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.OptionsContainer}>
         <View style={styles.OptionsBox}>
           <TouchableOpacity style={styles.Options} onPress={OnEditProfile}>
@@ -143,7 +186,7 @@ const SettingScreen = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.OptionsBox}>
+        {/* <View style={styles.OptionsBox}>
           <TouchableOpacity style={styles.Options} onPress={OnCart}>
             <View style={styles.IconContainer}>
               <Feather name="shopping-cart" size={20} color="#16a085" />
@@ -153,9 +196,14 @@ const SettingScreen = ({ navigation, route }) => {
               <AntDesign name="right" size={19} color="#202020" />
             </View>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.OptionsBox}>
-          <TouchableOpacity style={[styles.Options, styles.ContainerOpacity]}>
+          <TouchableOpacity
+            style={[styles.Options, styles.ContainerOpacity]}
+            onPress={() => {
+              setShowModal(!showModal);
+            }}
+          >
             <View style={styles.IconContainer}>
               <MaterialIcons name="logout" size={20} color="#16a085" />
             </View>
@@ -264,6 +312,24 @@ const styles = StyleSheet.create({
   },
   ContainerOpacity: {
     opacity: 0.4,
+  },
+
+  modalView1: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#000000aa",
+    paddingVertical: 400,
+    paddingHorizontal: 70,
+  },
+  modalView2: {
+    backgroundColor: "white",
+    padding: 20,
+    height: 150,
+  },
+  modalText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 40,
   },
 });
 export default SettingScreen;

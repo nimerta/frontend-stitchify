@@ -33,6 +33,7 @@ import CustomShippingAddress from "./components/CustomShippingAddress";
 import ViewCustomOrder from "./components/ViewCustomOrder";
 import CustomOrderCheckout from "./components/CustomOrderCheckout";
 const Stack = createNativeStackNavigator();
+import { StackActions } from "@react-navigation/native";
 
 function SplashScreen({ navigation }) {
   setTimeout(() => {

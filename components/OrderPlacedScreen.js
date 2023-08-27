@@ -10,7 +10,8 @@ const OrderPlacedScreen = ({ navigation, route }) => {
     <View style={styles.MainContainer}>
       <View style={styles.AnimationBox}>
         <Lottie
-          source={require("../../Stitchify/assets/80036-done.json")}
+          // source={require("../../Stitchify/assets/80036-done.json")}
+          source={require("../assets/80036-done.json")}
           autoPlay
           loop
         />

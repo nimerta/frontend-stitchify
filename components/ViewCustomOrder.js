@@ -34,22 +34,21 @@ const ViewCustomOrder = ({ navigation, route }) => {
 
   //const { data, addressObj, payment_method } = route.params;
   //const [address, setAddress] = useState(addressObj.formatted_address);
-  const [address, setAddress] = useState(
-    "Tariq road hammeeda heights building near pizza one"
-  );
-  const [phoneNumber, setPhoneNumber] = useState("03114567890");
-  const [name, setName] = useState("Nimerta bai");
-  //const { customOrderData } = route.params;
-  const [category, setCategory] = useState("Shirt Trouser");
-  const [fabric, setFabric] = useState("Cotton");
-  const [price, setPrice] = useState("5000");
-  const [instructions, setInstructions] = useState("Please make it elegant.");
+  const [address, setAddress] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [fabric, setFabric] = useState("");
+  const [price, setPrice] = useState("");
+  const [instructions, setInstructions] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [offerModalVisible, setOfferModalVisible] = useState(false);
   const [tailorImage, setTailorImage] = useState("");
   const [tailorName, setTailorName] = useState("");
   const [tailorOffer, setTailorOffer] = useState("");
+  const [orderImages, setOrderImages] = useState([]);
+  const [orderOffers, setOrderOffers] = useState([]);
 
   const handleAccept = () => {
     // Handle the acceptance logic here
@@ -60,18 +59,9 @@ const ViewCustomOrder = ({ navigation, route }) => {
   };
 
   const handleImagePress = (image) => {
-    setSelectedImage(image.source);
+    setSelectedImage(image.url);
     setImageModalVisible(true);
   };
-
-  const imageArray = [
-    { key: "1", source: require("../Images/blouse.jpg") },
-    { key: "2", source: require("../Images/home1.jpg") },
-    { key: "3", source: require("../Images/home2.jpg") },
-    { key: "4", source: require("../Images/home3.jpg") },
-    { key: "5", source: require("../Images/1234.jpg") },
-    { key: "6", source: require("../Images/2piece.jpg") },
-  ];
 
   const handleMakeOffer = () => {
     setOfferModalVisible(true);
@@ -110,10 +100,29 @@ const ViewCustomOrder = ({ navigation, route }) => {
   ];
 
   const handleViewCustomOrder = async () => {
+    console.log(
+      `http://${Ip.mainIp}/api/custom-order/get-custom-order/${orderId}`
+    );
     var apiResponse = await axios
       .get(`http://${Ip.mainIp}/api/custom-order/get-custom-order/${orderId}`)
       .then((onOrderFound) => {
         console.log("on order found: ", onOrderFound.data.customOrder);
+
+        setName(onOrderFound.data.customOrder.user.full_name);
+        setPhoneNumber(onOrderFound.data.customOrder.user.phone_no);
+        setAddress(onOrderFound.data.customOrder.address.formatted_address);
+        setOrderImages(onOrderFound.data.customOrder.images);
+        setCategory(onOrderFound.data.customOrder.category);
+        setFabric(onOrderFound.data.customOrder.fabric);
+        setPrice(onOrderFound.data.customOrder.total_amount);
+        setInstructions(
+          onOrderFound.data.customOrder.instructions !== ""
+            ? onOrderFound.data.customOrder.instructions
+            : "No Instructions"
+        );
+
+        console.log("offers: ", onOrderFound.data.customOrder.offers);
+        // setOrderOffers(onOrderFound.data.customOrder.offers);
       })
       .catch((onOrderFoundError) => {
         console.log("on order create error custom system: ", onOrderFoundError);
@@ -139,12 +148,17 @@ const ViewCustomOrder = ({ navigation, route }) => {
         <View style={styles.orderSummaryContainer}>
           <Text style={styles.sectionHeading}>Order Summary</Text>
           <View style={styles.imagesContainer}>
-            {imageArray.map((image, index) => (
+            {orderImages.map((image, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => handleImagePress(image)}
               >
-                <Image source={image.source} style={styles.thumbnailImage} />
+                <Image
+                  source={{
+                    uri: image.url,
+                  }}
+                  style={styles.thumbnailImage}
+                />
               </TouchableOpacity>
             ))}
           </View>
@@ -158,7 +172,9 @@ const ViewCustomOrder = ({ navigation, route }) => {
             <View style={styles.modalContainer}>
               <View style={styles.imageModal}>
                 <Image
-                  source={selectedImage}
+                  source={{
+                    uri: selectedImage,
+                  }}
                   style={styles.selectedImage}
                   resizeMode="contain"
                 />
@@ -179,7 +195,7 @@ const ViewCustomOrder = ({ navigation, route }) => {
             <Text style={styles.orderSummaryValue}>{fabric}</Text>
           </View>
           <View style={styles.orderSummaryItem}>
-            <Text style={styles.orderSummaryValue}>Rs{price}</Text>
+            <Text style={styles.orderSummaryValue}>Rs {price}</Text>
           </View>
           <View style={styles.orderSummaryItem}>
             <Text style={styles.orderSummaryValue}>{instructions}</Text>
@@ -187,7 +203,56 @@ const ViewCustomOrder = ({ navigation, route }) => {
         </View>
       </View>
       <View style={styles.acceptRejectContainer}>
-        <ScrollView vertical={true}>
+        {orderOffers.length === 0 ? (
+          <View
+            style={{
+              width: "100%",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                fontSize: 18,
+                color: "#16a085",
+              }}
+            >
+              No Offers!
+            </Text>
+          </View>
+        ) : (
+          <ScrollView vertical={true}>
+            {orderOffers.map((offer, index) => (
+              <View style={styles.tailorOfferContainer} key={index}>
+                <Image
+                  source={tailorOffers[0].image}
+                  style={styles.tailorImage}
+                />
+                <View style={styles.tailorDetails}>
+                  <Text style={styles.tailorName}>
+                    {offer.tailor.full_name}
+                  </Text>
+                  <Text style={styles.tailorOffer}>Rs {offer.amount}</Text>
+                </View>
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    style={[styles.acceptButton, styles.button]}
+                    onPress={handleAccept}
+                  >
+                    <Text style={styles.buttonText}>Accept</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.rejectButton, styles.button]}
+                    onPress={handleReject}
+                  >
+                    <Text style={styles.RejectedbuttonText}>Reject</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        )}
+        {/* <ScrollView vertical={true}>
           {tailorOffers.map((offer, index) => (
             <View style={styles.tailorOfferContainer} key={index}>
               <Image source={offer.image} style={styles.tailorImage} />
@@ -211,7 +276,7 @@ const ViewCustomOrder = ({ navigation, route }) => {
               </View>
             </View>
           ))}
-        </ScrollView>
+        </ScrollView> */}
       </View>
     </ScrollView>
   );

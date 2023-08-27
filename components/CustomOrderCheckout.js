@@ -77,6 +77,11 @@ const CustomOrderCheckout = ({ navigation, route }) => {
       .then((onOrderCreate) => {
         console.log("on order create: ", onOrderCreate.data);
 
+        console.log(
+          "onOrderCreate.data.createdOrder._id: ",
+          onOrderCreate.data.createdOrder
+        );
+
         setOrderId(onOrderCreate.data.createdOrder._id);
 
         if (onOrderCreate.data.success) {

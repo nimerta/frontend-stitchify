@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ShirtSize from "../Images/kurta1.jpg";
 import TrouserSize from "../Images/trouser.png";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -16,9 +16,10 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import axios from "axios";
+import Ip from "../IPConfigration";
 
 const ViewMeasurement = ({ navigation, route }) => {
-  const [shirtLength, setShirtLength] = useState("");
+  const [shirtLength, setShirtLength] = useState("22");
   const [shoulder, setShoulder] = useState("20");
   const [sleeveLength, setSleeveLength] = useState("");
   const [sleeveOpening, setSleeveOpening] = useState("");
@@ -34,7 +35,7 @@ const ViewMeasurement = ({ navigation, route }) => {
   const [legOpening, setLegOpening] = useState("10");
   const [trouserRise, setTrouserRise] = useState("");
 
-  const user_id = route.params;
+  const user_id = route.params.data;
 
   const MeasurementData = {
     shoulder: shoulder,
@@ -54,12 +55,56 @@ const ViewMeasurement = ({ navigation, route }) => {
     leg_opening: legOpening,
   };
 
+  const getUserMeasurement = async () => {
+    console.log(`http://${Ip.mainIp}/api/user/get-measurement/${user_id}`);
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIp}/api/user/get-measurement/${user_id}`)
+      .then((onMeasurementFound) => {
+        console.log("onMeasurementFound: ", onMeasurementFound.data);
+        var {
+          shirt_length,
+          shoulder,
+          sleeve_length,
+          bust,
+          waist,
+          hip,
+          shirt_bottom,
+          trouser_length,
+          trouser_waist,
+          inseam,
+          thigh,
+          trouser_hip,
+          leg_opening,
+          trouser_rise,
+        } = onMeasurementFound.data.measurement;
+        console.log(shirt_length);
+        setShirtLength(shirt_length);
+        setShoulder(shoulder);
+        setSleeveLength(sleeve_length);
+        setBust(bust);
+        setWaist(waist);
+        setHips(hip);
+        setShirtBottom(shirt_bottom);
+        setTrouserLength(trouser_length);
+        setTrouserWaist(trouser_waist);
+        setInseam(inseam);
+        setThighs(thigh);
+        setTrouserHip(trouser_hip);
+        setLegOpening(leg_opening);
+        setTrouserRise(trouser_rise);
+      });
+  };
+
+  useEffect(() => {
+    getUserMeasurement();
+  }, []);
+
   return (
     <KeyboardAwareScrollView style={styles.container}>
       <ScrollView>
-        <Text style={styles.TxtStyle}>Measurement Form</Text>
+        {/* <Text style={styles.TxtStyle}>Measurement Form</Text>
         <Image style={styles.ShirtChart} source={ShirtSize} />
-        <Image style={styles.TrouserChart} source={TrouserSize} />
+        <Image style={styles.TrouserChart} source={TrouserSize} /> */}
         <Text style={styles.container2}>Shirt (Inches) </Text>
 
         <View style={styles.customContainer}>
