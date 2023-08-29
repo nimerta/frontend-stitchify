@@ -21,6 +21,24 @@ const HomeScreen = ({ route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [allDesigns, setAllDesigns] = useState([]);
 
+  const [loggedInUser, setLoggedInUser] = useState(route.params.loggedInUser);
+  const [greetingMessage, setGreetingMessage] = useState("");
+
+  const getGreeting = () => {
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+
+    if (currentHour >= 5 && currentHour < 12) {
+      return "Good Morning!";
+    } else if (currentHour >= 12 && currentHour < 17) {
+      return "Good Afternoon!";
+    } else if (currentHour >= 17 && currentHour < 21) {
+      return "Good Evening!";
+    } else {
+      return "Good Night!";
+    }
+  };
+
   const getAllDesigns = async () => {
     try {
       const response = await axios.get(
@@ -33,7 +51,8 @@ const HomeScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    console.log("home home data: ", route.params.user);
+    console.log("home home data: ", route.params.loggedInUser);
+    setGreetingMessage(getGreeting());
     setTimeout(() => {
       setIsLoading(false);
     }, 3000);
@@ -66,6 +85,7 @@ const HomeScreen = ({ route }) => {
       image: require("../Images/iconOrder.png"),
       screen: "CustomOrderScreen",
       userId: route.params.user,
+      loggedInUser: loggedInUser,
     },
   ];
 
@@ -158,12 +178,14 @@ const HomeScreen = ({ route }) => {
             <View style={styles.ProfileBox}>
               <Image
                 style={styles.ProfileStyle}
-                source={require("../Images/mobile.jpg")}
+                source={{
+                  uri: loggedInUser?.image?.url,
+                }}
               ></Image>
             </View>
             <View style={styles.TxtContainer}>
-              <Text style={styles.Txt1Style}>Hi, Sejal Sitani! </Text>
-              <Text style={styles.Txt2Style}>Good Morning!</Text>
+              <Text style={styles.Txt1Style}>{loggedInUser?.full_name}</Text>
+              <Text style={styles.Txt2Style}>{greetingMessage}</Text>
             </View>
             <TouchableOpacity style={styles.notifcationStyle}>
               <MaterialIcons
@@ -210,6 +232,7 @@ const HomeScreen = ({ route }) => {
                     onPress={() => {
                       navigation.navigate(item.screen, {
                         user: route.params.user,
+                        loggedInUser: loggedInUser,
                       });
                     }}
                     key={item.key}

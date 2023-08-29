@@ -16,6 +16,7 @@ const Tab = createBottomTabNavigator();
 
 const BottomNavigator = ({ route, navigation }) => {
   var [userId, setUserId] = useState(route.params.data);
+  var [loggedInUser, setLoggedInUser] = useState(route.params.logged_in_user);
 
   useEffect(() => {
     console.log("data: ", route.params.data);
@@ -86,7 +87,7 @@ const BottomNavigator = ({ route, navigation }) => {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
-        initialParams={{ user: userId }}
+        initialParams={{ user: userId, loggedInUser: loggedInUser }}
       />
       <Tab.Screen name="Search" component={SearchScreen} />
       <Tab.Screen
@@ -106,6 +107,7 @@ const BottomNavigator = ({ route, navigation }) => {
             navigation.navigate("Settings", {
               data: userId,
               updatedUser: null,
+              loggedInUser: loggedInUser,
             });
           },
         })}

@@ -18,6 +18,7 @@ import { mainIp } from "../IPConfigration";
 
 const CustomOrderScreen = ({ navigation, route }) => {
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(-1);
   const [images, setImages] = useState([]);
   const [imagesBase64, setImagesBase64] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,9 +28,7 @@ const CustomOrderScreen = ({ navigation, route }) => {
   const [instructions, setInstructions] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
   const [userId, setUserId] = useState(route.params.user);
-  const handleDeleteImage = () => {
-    setModalVisible(false);
-  };
+  const [loggedInUser, setLoggedInUser] = useState(route.params.loggedInUser);
 
   const [areas, setAreas] = useState([]);
 
@@ -57,20 +56,11 @@ const CustomOrderScreen = ({ navigation, route }) => {
     { label: "Silk", value: "silk" },
     { label: "Polyester", value: "polyester" },
   ];
-  const areaOptions = [
-    { label: "karachi", value: "karachi" },
-    { label: "Sukkar", value: "Sukkar" },
-    { label: "Hyderabad", value: "Hyderabad" },
-    { label: "Islamabad", value: "Islamabad" },
-    { label: "Lahore", value: "Lahore" },
-    { label: "Multan", value: "Multan" },
-  ];
+
   const selectImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 0.5,
-
-      allowsMultipleSelection: true,
       base64: true,
     });
 
@@ -81,20 +71,6 @@ const CustomOrderScreen = ({ navigation, route }) => {
       setSelectedImage(result.uri);
     }
   };
-  // const selectImage = async () => {
-  //   const result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     quality: 0.5,
-  //     allowsMultipleSelection: true,
-  //     base64: true,
-  //   });
-
-  //   if (!result.canceled) {
-  //     const newImages = [...images, ...result.uri]; // Add the selected images to the existing images array
-  //     setImagesBase64([...imagesBase64, ...result.base64]); // Similarly, update the imagesBase64 array
-  //     setImages(newImages);
-  //   }
-  // };
 
   const handleNext = () => {
     if (!category || !fabric || !price) {
@@ -115,9 +91,31 @@ const CustomOrderScreen = ({ navigation, route }) => {
       userId,
       imagesBase64,
       selectedArea,
+      loggedInUser,
     };
 
     navigation.navigate("CustomShippingAddress", { data: customOrderData });
+  };
+
+  const deleteImage = (indexToDelete) => {
+    if (indexToDelete >= 0 && indexToDelete < images.length) {
+      const newArray = images.filter((image, index) => index !== indexToDelete);
+      setImages(newArray);
+      console.log("Image deleted successfully");
+
+      if (newArray.length > 0) {
+        const newSelectedIndex = indexToDelete === 0 ? 0 : indexToDelete - 1;
+        setSelectedImage(newArray[newSelectedIndex]);
+        setSelectedImageIndex(newSelectedIndex);
+      } else {
+        setSelectedImage(null);
+        setModalVisible(false);
+      }
+    } else {
+      console.log("Invalid index provided");
+    }
+
+    setModalVisible(!modalVisible);
   };
 
   useEffect(() => {
@@ -144,7 +142,10 @@ const CustomOrderScreen = ({ navigation, route }) => {
           {images.map((image, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => setSelectedImage(image)}
+              onPress={() => {
+                setSelectedImage(image);
+                setSelectedImageIndex(index);
+              }}
             >
               <Image source={{ uri: image }} style={styles.smallThumbnail} />
             </TouchableOpacity>
@@ -197,7 +198,7 @@ const CustomOrderScreen = ({ navigation, route }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.deleteButton}
-              onPress={handleDeleteImage}
+              onPress={() => deleteImage(selectedImageIndex)}
             >
               <Text style={styles.deleteButtonText}>Delete</Text>
             </TouchableOpacity>

@@ -26,6 +26,7 @@ const SettingScreen = ({ navigation, route }) => {
   var [fullName, setFullName] = useState("");
   var [userImage, setUserImage] = useState("");
   var [showModal, setShowModal] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState(route.params.loggedInUser);
 
   const OnEditProfile = () => {
     navigation.navigate("EditProfile", { data: userId, updatedUser: null });
@@ -34,7 +35,9 @@ const SettingScreen = ({ navigation, route }) => {
     navigation.navigate("UpdatePassword");
   };
   const OnStandardOrder = () => {
-    navigation.navigate("StandardOrderHistory");
+    navigation.navigate("StandardOrderHistory", {
+      loggedInUser: loggedInUser,
+    });
   };
   const OnAddressList = () => {
     navigation.navigate("AddressListScreen", { data: userId });

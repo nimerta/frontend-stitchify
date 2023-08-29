@@ -17,11 +17,7 @@ const AddressListScreen = ({ navigation, route }) => {
   const [addressToDelete, setAddressToDelete] = useState("");
   const [userId, setUserId] = useState(route.params.data);
   const [refreshList, setRefreshList] = useState(false);
-  const [addressList, setAddressList] = useState([
-    "Hammeda heights shaheed-e-milat road karachi sindh pakistan ",
-    "szabist 100 campus 2 talwar",
-    "hello hi bye bye i dont know who are u ? where do u live ? bhad mn jao ",
-  ]);
+  const [addressList, setAddressList] = useState([]);
   const handleRefresh = () => {
     getUserAddressList();
     // Toggle the refreshList state to trigger useEffect
@@ -47,10 +43,29 @@ const AddressListScreen = ({ navigation, route }) => {
     setAddressList(updatedList);
     setShowModal(false);
   };
+
   const handleDeleteAddress = (index) => {
     setAddressToDelete(addressList[index]);
     setShowModal(true);
   };
+
+  const deleteAddress = async()=>{
+    var apiResponse = await axios
+      .get(`http://${Ip.mainIp}/api/address/delete-address/${userId}`)
+      .then((onAddressListFound) => {
+        // console.log("on address list found: ", onAddressListFound.data);
+
+        const formattedAddresses = onAddressListFound.data.addresses.map(
+          (obj) => obj.formatted_address
+        );
+        console.log("formatted array: ", formattedAddresses);
+
+        setAddressList(onAddressListFound.data.addresses);
+      })
+      .catch((onAddressListFoundError) => {
+        console.log("on address list found error: ", onAddressListFoundError);
+      });
+  }
 
   const getUserAddressList = async () => {
     console.log(userId);

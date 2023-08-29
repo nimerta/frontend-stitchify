@@ -32,8 +32,6 @@ const CustomOrderCheckout = ({ navigation, route }) => {
   //const { data, addressObj, payment_method } = route.params;
   const [shippingAddress, setShippingAddress] = useState("");
 
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [name, setName] = useState("");
   const { customOrderData, data, payment_method, addressObj } = route.params;
   const [category, setCategory] = useState(data.customData.category);
   const [fabric, setFabric] = useState(data.customData.fabric);
@@ -49,6 +47,17 @@ const CustomOrderCheckout = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState(data);
   const [orderId, setOrderId] = useState("");
+
+  const [phoneNumber, setPhoneNumber] = useState(
+    data.customData.loggedInUser?.phone_no
+      ? data.customData.loggedInUser?.phone_no
+      : "Phone No: N/A"
+  );
+  const [name, setName] = useState(
+    data.customData.loggedInUser?.full_name
+      ? data.customData.loggedInUser?.full_name
+      : "Name: N/A"
+  );
 
   //const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const handleImagePress = (image) => {

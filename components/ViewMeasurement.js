@@ -188,9 +188,9 @@ const ViewMeasurement = ({ navigation, route }) => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.btn2}>
+        {/* <TouchableOpacity style={styles.btn2}>
           <Text style={styles.btnText}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </KeyboardAwareScrollView>
   );

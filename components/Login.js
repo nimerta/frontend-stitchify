@@ -61,6 +61,7 @@ const Login = ({ navigation }) => {
             alert("Login succesfully");
             navigation.navigate("Main", {
               data: onSuccess.data.singleUser._id,
+              logged_in_user: onSuccess.data.singleUser,
             });
           } else {
             alert("Invalid email or password");

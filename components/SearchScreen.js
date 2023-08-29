@@ -9,6 +9,8 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import axios from "axios";
+import Ip from "../IPConfigration";
 
 const designsData = [
   {
@@ -28,18 +30,32 @@ const designsData = [
   // Add more design data here
 ];
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredDesigns, setFilteredDesigns] = useState([]);
 
+  const [allDesigns, setAllDesigns] = useState([]);
+
+  const getAllDesigns = async () => {
+    try {
+      const response = await axios.get(
+        `http://${Ip.mainIp}/api/home/get-designs-for-you`
+      );
+      setAllDesigns(response.data.designForYou);
+    } catch (error) {
+      console.log("Error retrieving designs:", error);
+    }
+  };
+
   useEffect(() => {
+    getAllDesigns();
     if (searchQuery === "") {
       setFilteredDesigns([]);
     } else {
-      const filtered = designsData.filter(
+      const filtered = allDesigns.filter(
         (design) =>
-          design.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          design.category.toLowerCase().includes(searchQuery.toLowerCase())
+          design.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          design.design_for.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredDesigns(filtered);
     }
@@ -50,10 +66,15 @@ const SearchScreen = () => {
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.designItem} onPress={handleSearch}>
       <View style={styles.designImageContainer}>
-        <Image source={item.image} style={styles.designImage} />
+        <Image
+          source={{
+            uri: item?.image?.url,
+          }}
+          style={styles.designImage}
+        />
       </View>
       <View style={styles.designDetails}>
-        <Text style={styles.designName}>{item.name}</Text>
+        <Text style={styles.designName}>{item.title}</Text>
         <Text style={styles.designPrice}>Rs {item.price}</Text>
       </View>
     </TouchableOpacity>
@@ -70,7 +91,7 @@ const SearchScreen = () => {
       <FlatList
         data={filteredDesigns}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         style={styles.designList}
       />
     </ScrollView>

@@ -7,20 +7,7 @@ import { AlignRight } from "react-native-feather";
 const MyCartScreen = ({ navigation, route }) => {
   const { AddToCartData } = route.params;
   var [userId, setUserId] = useState(route.params.user);
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Maxi Dress",
-      price: 99.99,
-      image: require("../Images/blouse.jpg"),
-    },
-    {
-      id: 2,
-      name: "Blouse",
-      price: 49.99,
-      image: require("../Images/blouse.jpg"),
-    },
-  ]);
+  const [cartItems, setCartItems] = useState([]);
   const handleRefreshCart = () => {
     getUserCart();
   };

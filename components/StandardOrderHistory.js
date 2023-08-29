@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,41 +8,75 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import axios from "axios";
+import Ip from "../IPConfigration";
 
-const StandardOrderHistory = () => {
+const StandardOrderHistory = ({ navigation, route }) => {
   const [name, setName] = useState("");
   //const [userId, setUserId] = useState(data);
-  const orderHistoryData = [
-    {
-      id: 1,
-      image: require("../Images/blouse.jpg"),
-      name: "John Doe",
-      date: "2023-08-15",
-      category: "Blouse",
-      price: "5000",
-    },
-    {
-      id: 2,
-      image: require("../Images/blouse.jpg"),
-      name: "John Doe",
-      date: "2023-08-15",
-      category: "Blouse",
-      price: "700",
-    },
-  ];
+  const [loggedInUser, setLoggedInUser] = useState(route.params.loggedInUser);
+
+  // const orderHistoryData = [
+  //   {
+  //     id: 1,
+  //     image: require("../Images/blouse.jpg"),
+  //     name: "John Doe",
+  //     date: "2023-08-15",
+  //     category: "Blouse",
+  //     price: "5000",
+  //   },
+  //   {
+  //     id: 2,
+  //     image: require("../Images/blouse.jpg"),
+  //     name: "John Doe",
+  //     date: "2023-08-15",
+  //     category: "Blouse",
+  //     price: "700",
+  //   },
+  // ];
+
+  const [orderHistoryData, setOrderHistoryData] = useState([]);
+
+  const getAllStandardOrders = async () => {
+    var apiResponse = await axios
+      .get(
+        `http://${Ip.mainIp}/api/standard-order/get-all-user-standard-order/${loggedInUser?._id}`
+      )
+      .then((onFound) => {
+        console.log("onFound: ", onFound.data);
+        setOrderHistoryData(onFound.data.orders);
+      })
+      .catch((onFoundError) => {
+        console.log("onFoundError: ", onFoundError);
+      });
+  };
+
+  useEffect(() => {
+    getAllStandardOrders();
+  }, []);
+
   const renderItem = ({ item }) => (
     <TouchableOpacity style={styles.touchableOrderItem}>
       <View style={styles.orderItem}>
         <View style={styles.imageContainer}>
-          <Image source={item.image} style={styles.orderImage} />
+          <Image
+            // source={item.image}
+            source={{
+              uri: item.items[0].item.image?.url,
+            }}
+            style={styles.orderImage}
+          />
         </View>
         <View style={styles.orderDetails}>
-          <Text style={styles.userName}>{item.name}</Text>
-          <Text style={styles.orderDate}>{item.date}</Text>
-          <Text style={styles.orderCatergory}>{item.category}</Text>
+          <Text style={styles.userName}>{item.tailor.full_name}</Text>
+          <Text style={styles.orderDate}>{`${new Date(
+            item.createdAt
+          ).getDate()}-${new Date(item.createdAt).getMonth()}-${new Date(
+            item.createdAt
+          ).getFullYear()}`}</Text>
+          <Text style={styles.orderCatergory}>{item.order_status}</Text>
         </View>
-        <Text style={styles.orderPrice}>Rs {item.price}</Text>
+        <Text style={styles.orderPrice}>Rs {item.total_amount}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -53,7 +87,7 @@ const StandardOrderHistory = () => {
         <FlatList
           data={orderHistoryData}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item._id.toString()}
         />
       </View>
     </ScrollView>
