@@ -32,6 +32,8 @@ const ViewCustomOrder = ({ navigation, route }) => {
 
   const [orderId, setOrderId] = useState(route.params.data);
 
+  console.log("route.params.data: ", route.params.data);
+
   //const { data, addressObj, payment_method } = route.params;
   //const [address, setAddress] = useState(addressObj.formatted_address);
   const [address, setAddress] = useState("");
@@ -49,13 +51,19 @@ const ViewCustomOrder = ({ navigation, route }) => {
   const [tailorOffer, setTailorOffer] = useState("");
   const [orderImages, setOrderImages] = useState([]);
   const [orderOffers, setOrderOffers] = useState([]);
+  const [acceptedOffer, setAcceptedOffer] = useState(null);
 
-  const handleAccept = () => {
+  const handleAccept = (offerId) => {
     // Handle the acceptance logic here
+    console.log(offerId);
+    acceptOrderOffer(offerId);
+    handleViewCustomOrder();
   };
 
-  const handleReject = () => {
+  const handleReject = (offerId) => {
     // Handle the rejection logic here
+    declineOrderOffer(offerId);
+    handleViewCustomOrder();
   };
 
   const handleImagePress = (image) => {
@@ -122,10 +130,68 @@ const ViewCustomOrder = ({ navigation, route }) => {
         );
 
         console.log("offers: ", onOrderFound.data.customOrder.offers);
-        // setOrderOffers(onOrderFound.data.customOrder.offers);
+
+        setOrderOffers(onOrderFound.data.customOrder.offers);
+        setAcceptedOffer(onOrderFound.data.customOrder.accepted_offer);
+
+        console.log(
+          "onOrderFound.data.customOrder.accepted_offer: ",
+          onOrderFound.data.customOrder.accepted_offer
+        );
       })
       .catch((onOrderFoundError) => {
         console.log("on order create error custom system: ", onOrderFoundError);
+      });
+  };
+
+  const acceptOrderOffer = async (offerId) => {
+    const bodyData = {
+      acceptedOfferId: offerId,
+    };
+    console.log(
+      `http://${Ip.mainIp}/api/custom-order/accept-offer/${orderId}`,
+      bodyData
+    );
+    var apiResponse = await axios
+      .post(
+        `http://${Ip.mainIp}/api/custom-order/accept-offer/${orderId}`,
+        bodyData
+      )
+      .then((onOfferAccept) => {
+        console.log("onOfferAccept: ", onOfferAccept.data);
+
+        alert(onOfferAccept.data.message);
+      })
+      .catch((onOfferAcceptError) => {
+        console.log(
+          "on order create error custom system: ",
+          onOfferAcceptError
+        );
+      });
+  };
+
+  const declineOrderOffer = async (offerId) => {
+    console.log(
+      `http://${Ip.mainIp}/api/custom-order/decline-offer/${orderId}`
+    );
+    const bodyData = {
+      declinedOfferId: offerId,
+    };
+    var apiResponse = await axios
+      .post(
+        `http://${Ip.mainIp}/api/custom-order/decline-offer/${orderId}`,
+        bodyData
+      )
+      .then((onOfferDecline) => {
+        console.log("onOfferDecline: ", onOfferDecline.data);
+
+        alert(onOfferDecline.data.message);
+      })
+      .catch((onOfferDeclineError) => {
+        console.log(
+          "on order create error custom system: ",
+          onOfferDeclineError
+        );
       });
   };
 
@@ -202,7 +268,109 @@ const ViewCustomOrder = ({ navigation, route }) => {
           </View>
         </View>
       </View>
-      <View style={styles.acceptRejectContainer}>
+      {acceptedOffer !== null ? (
+        <View
+          style={{
+            width: "100%",
+            height: 120,
+            backgroundColor: "#F0F0F0",
+            padding: 10,
+          }}
+        >
+          <Text>Offer Amount: {acceptedOffer.amount}</Text>
+          <Text>Offer Status: {acceptedOffer.offer_status.toUpperCase()}</Text>
+
+          <Text>Tailor: {acceptedOffer.tailor.full_name}</Text>
+          <Text>
+            Offer Created At:{" "}
+            {`${new Date(acceptedOffer.createdAt).getDate()}-${new Date(
+              acceptedOffer.createdAt
+            ).getMonth()}-${new Date(acceptedOffer.createdAt).getFullYear()}`}
+          </Text>
+        </View>
+      ) : (
+        <View style={styles.acceptRejectContainer}>
+          {orderOffers.length === 0 ? (
+            <View
+              style={{
+                width: "100%",
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  fontSize: 18,
+                  color: "#16a085",
+                }}
+              >
+                No Offers!
+              </Text>
+            </View>
+          ) : (
+            <ScrollView vertical={true}>
+              {orderOffers.map((offer, index) => (
+                <View style={styles.tailorOfferContainer} key={index}>
+                  <Image
+                    source={tailorOffers[0].image}
+                    style={styles.tailorImage}
+                  />
+                  <View style={styles.tailorDetails}>
+                    <Text style={styles.tailorName}>
+                      {offer.tailor.full_name}
+                    </Text>
+                    <Text style={styles.tailorOffer}>Rs {offer.amount}</Text>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                      style={[styles.acceptButton, styles.button]}
+                      onPress={() => {
+                        handleAccept(offer?._id);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>Accept</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.rejectButton, styles.button]}
+                      onPress={() => {
+                        handleReject(offer?._id);
+                      }}
+                    >
+                      <Text style={styles.RejectedbuttonText}>Reject</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </ScrollView>
+          )}
+          {/* <ScrollView vertical={true}>
+          {tailorOffers.map((offer, index) => (
+            <View style={styles.tailorOfferContainer} key={index}>
+              <Image source={offer.image} style={styles.tailorImage} />
+              <View style={styles.tailorDetails}>
+                <Text style={styles.tailorName}>{offer.name}</Text>
+                <Text style={styles.tailorOffer}>Offer: Rs {offer.offer}</Text>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={[styles.acceptButton, styles.button]}
+                  onPress={handleAccept}
+                >
+                  <Text style={styles.buttonText}>Accept</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.rejectButton, styles.button]}
+                  onPress={handleReject}
+                >
+                  <Text style={styles.RejectedbuttonText}>Reject</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView> */}
+        </View>
+      )}
+      {/* <View style={styles.acceptRejectContainer}>
         {orderOffers.length === 0 ? (
           <View
             style={{
@@ -237,13 +405,17 @@ const ViewCustomOrder = ({ navigation, route }) => {
                 <View style={styles.buttonContainer}>
                   <TouchableOpacity
                     style={[styles.acceptButton, styles.button]}
-                    onPress={handleAccept}
+                    onPress={() => {
+                      handleAccept(offer?._id);
+                    }}
                   >
                     <Text style={styles.buttonText}>Accept</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.rejectButton, styles.button]}
-                    onPress={handleReject}
+                    onPress={() => {
+                      handleReject(offer?._id);
+                    }}
                   >
                     <Text style={styles.RejectedbuttonText}>Reject</Text>
                   </TouchableOpacity>
@@ -277,7 +449,7 @@ const ViewCustomOrder = ({ navigation, route }) => {
             </View>
           ))}
         </ScrollView> */}
-      </View>
+      {/* </View> */}
     </ScrollView>
   );
 };

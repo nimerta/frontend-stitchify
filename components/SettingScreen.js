@@ -39,6 +39,12 @@ const SettingScreen = ({ navigation, route }) => {
       loggedInUser: loggedInUser,
     });
   };
+
+  const OnCustomOrder = () => {
+    navigation.navigate("CustomOrderHistory", {
+      loggedInUser: loggedInUser,
+    });
+  };
   const OnAddressList = () => {
     navigation.navigate("AddressListScreen", { data: userId });
   };
@@ -179,7 +185,7 @@ const SettingScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
         <View style={styles.OptionsBox}>
-          <TouchableOpacity style={styles.Options}>
+          <TouchableOpacity style={styles.Options} onPress={OnCustomOrder}>
             <View style={styles.IconContainer}>
               <Octicons name="checklist" size={20} color="#16a085" />
             </View>

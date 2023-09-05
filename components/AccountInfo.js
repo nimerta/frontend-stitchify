@@ -10,7 +10,7 @@ import {
   Modal,
   KeyboardAvoidingView,
 } from "react-native";
-import mainIp from "../IPConfigration";
+import { mainIp } from "../IPConfigration";
 
 const AccountInfo = ({ navigation, route }) => {
   const [email, setEmail] = useState("");

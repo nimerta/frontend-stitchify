@@ -35,6 +35,7 @@ import CustomOrderCheckout from "./components/CustomOrderCheckout";
 import StandardOrderHistory from "./components/StandardOrderHistory";
 const Stack = createNativeStackNavigator();
 import { StackActions } from "@react-navigation/native";
+import CustomOrderHistory from "./components/CustomOrderHistory";
 
 function SplashScreen({ navigation }) {
   setTimeout(() => {
@@ -177,6 +178,12 @@ export default function App() {
         <Stack.Screen
           name="StandardOrderHistory"
           component={StandardOrderHistory}
+          //options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="CustomOrderHistory"
+          component={CustomOrderHistory}
           //options={{ headerShown: false }}
         />
       </Stack.Navigator>

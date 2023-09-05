@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
 
   genderPicker: {
     width: "100%",
-    top: -75,
+    top: -65,
     //backgroundColor: "yellow",
   },
 });

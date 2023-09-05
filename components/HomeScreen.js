@@ -73,12 +73,7 @@ const HomeScreen = ({ route }) => {
       title: "Tailor Made Designs",
       image: require("../Images/icon2.png"),
     },
-    {
-      key: "3",
-      title: "Dupatta pico",
-      image: require("../Images/icon4.png"),
-      screen: "CustomOrderCheckout",
-    },
+
     {
       key: "4",
       title: "Custom Order",
@@ -195,7 +190,7 @@ const HomeScreen = ({ route }) => {
               />
             </TouchableOpacity>
           </View>
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.SwiperContainer}>
               <Swiper
                 autoplay={true}
@@ -256,6 +251,7 @@ const HomeScreen = ({ route }) => {
                 data={categories}
                 horizontal={true}
                 renderItem={renderCategories}
+                showsHorizontalScrollIndicator={false}
                 keyExtractor={(item) => item.key}
               />
             </View>
@@ -272,6 +268,7 @@ const HomeScreen = ({ route }) => {
                 numColumns={2}
                 renderItem={renderDesigns}
                 keyExtractor={(item) => item.key}
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.DesignContainer}
               />
             </View>
